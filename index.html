@@ -59,7 +59,12 @@
     </nav>
 
     <div id="main-content">
-        <h1>Iasonas Kakandris</h1>
+        <div id="typing-svg">
+        <!-- Replace this with the provided Typing SVG code -->
+        [![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&duration=2500&pause=500&multiline=true&random=false&width=600&height=120&lines=Jason+Kakandris+;Electrical+and+Computer+Engineering+student)](https://git.io/typing-svg)
+        </div>
+    </div>
+
         <p>Hi!</p>
 
     <div id="about-me">
@@ -74,9 +79,17 @@
     </div>
 
     <script>
-        // JavaScript to toggle the visibility of the "About Me" section
-        document.querySelector('a[href="#about-me"]').addEventListener('click', function() {
-            document.getElementById('about-me').style.display = 'block';
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get the current path
+            var currentPath = window.location.pathname;
+        
+            // Show or hide the "About Me" section based on the current path
+            var aboutMeSection = document.getElementById('about-me');
+            if (currentPath === '/about-me') {
+                aboutMeSection.style.display = 'block';
+            } else {
+                aboutMeSection.style.display = 'none';
+            }
         });
     </script>
 
