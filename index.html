@@ -52,7 +52,7 @@
 <body>
 
     <nav>
-        <a href="">Home</a>
+        <a href="#home">Home</a>
         <a href="#about-me">About Me</a>
         <a href="#cv">CV</a>
         <a href="#courses">Courses</a>
@@ -79,17 +79,14 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Get the current path
-            var currentPath = window.location.pathname;
-        
-            // Show or hide the "About Me" section based on the current path
-            var aboutMeSection = document.getElementById('about-me');
-            if (currentPath === '/#about-me') {
-                aboutMeSection.style.display = 'block';
-            } else {
-                aboutMeSection.style.display = 'none';
-            }
+        document.querySelector('a[href="#about-me"]').addEventListener('click', function() {
+            
+            document.getElementById('about-me').style.display = 'block';
+        });
+
+        document.querySelector('a[href="#home"]').addEventListener('click', function() {
+            
+            document.getElementById('about-me').style.display = 'none';
         });
     </script>
 
