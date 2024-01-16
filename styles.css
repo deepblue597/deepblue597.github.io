@@ -43,7 +43,6 @@ margin: 0 15px;
 font-size: 24px;
 }
 
-/* Add styling for the Projects page */
 #projects-content {
     max-width: 800px;
     margin: 0 auto;
@@ -51,4 +50,19 @@ font-size: 24px;
 
 .project {
     margin-bottom: 20px;
+}
+
+.project h2 {
+    position: relative;
+}
+
+.project h2::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px; /* Adjust the height of the line as needed */
+    background-color: #fff; /* Change the background color to white */
 }
