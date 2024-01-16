@@ -64,6 +64,12 @@ font-size: 24px;
 
 .project h2 {
     position: relative;
+    color: #ffcc00;
+}
+
+.main  {
+    position: relative;
+    color: #ffcc00;
 }
 
 .project h2::after {
@@ -75,4 +81,48 @@ font-size: 24px;
     width: 100%;
     height: 1px; /* Adjust the height of the line as needed */
     background-color: #fff; /* Change the background color to white */
+}
+
+
+@import url('https://fonts.googleapis.com/css?family=Dosis:300,400,700');
+
+#main {
+
+    
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: none;
+
+   
+    * {
+      cursor: inherit;
+    }
+  }
+
+#cursor {
+  position: absolute;
+  left: -28px;
+  top: -15px;
+  will-change: transform;
+  transform: translate(-999px, -999px);
+  pointer-events: none;
+
+  img {
+    will-change: transform;
+    transition: transform .1s linear;
+  }
+}
+
+
+
+header {
+  text-align: center;
+
+  img {
+    opacity: .3;
+    
+  }
+
+
 }
