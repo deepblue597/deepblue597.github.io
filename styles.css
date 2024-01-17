@@ -17,6 +17,17 @@ nav a {
     text-decoration: none;
     margin: 0 15px;
 }
+.dot{ 
+    height: 60px;
+    width: 66px;
+    background-color: rgb(21, 40, 120);
+    border-radius: 50%;
+    display: inline-block;
+    top: 81.5%;
+    position: absolute;
+    right: 48.27%;
+    z-index: -1;
+}
 
 #main-content {
     margin-top: 50px;
