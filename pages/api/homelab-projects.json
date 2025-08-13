@@ -22,7 +22,7 @@
   },
   {
     "id": 4,
-    "name": "Blog Website",
+    "name": "From bits to being",
     "image": "blog.png",
     "description": "A blog website using jekyll to share knowledge and experiences about home automation, DIY projects, and technology.",
     "tags": ["jekyll"],
