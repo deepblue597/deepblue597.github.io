@@ -165,3 +165,17 @@
 .PowerApps:hover {
   background: rgba(116, 39, 116, 0.25); /* Lighter Purple Background */
 }
+
+.jekyll {
+  border: 0.1rem solid #cc0000; /* Red */
+}
+.jekyll:hover {
+  background: rgba(204, 0, 0, 0.25); /* Lighter Red Background */
+}
+
+.Kubernetes {
+  border: 0.1rem solid #326ce5; /* Blue */
+}
+.Kubernetes:hover {
+  background: rgba(50, 108, 229, 0.25); /* Lighter Blue Background */
+}

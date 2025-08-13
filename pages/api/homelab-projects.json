@@ -1,0 +1,31 @@
+[
+  {
+    "id": 1,
+    "name": "Self-Hosted Media Server",
+    "image": "jellyfin.jpg",
+    "description": "A personal media server setup using Jellyfin, *Arr apps, Qbittorent and gluetun VPN to stream movies, TV shows, and music across devices.",
+    "tags": ["Docker"]
+  },
+  {
+    "id": 2,
+    "name": "Media Storage and Backup",
+    "image": "media-storage.jpg",
+    "description": "A robust storage solution using a Raspberry Pi and external hard drives to store and back up media files, ensuring data safety and accessibility. Tools: openmediavault, plex, paperlessngx.",
+    "tags": ["Docker"]
+  },
+  {
+    "id": 3,
+    "name": "Game simulator",
+    "image": "retro-games.jpg",
+    "description": "A game simulator setup using RetroPie on a Raspberry Pi and Dolphin to emulate classic gaming consoles, providing a nostalgic gaming experience.",
+    "tags": ["Docker"]
+  },
+  {
+    "id": 4,
+    "name": "Blog Website",
+    "image": "blog.png",
+    "description": "A blog website using jekyll to share knowledge and experiences about home automation, DIY projects, and technology.",
+    "tags": ["jekyll"],
+    "source_code": "https://github.com/deepblue597/blog"
+  }
+]

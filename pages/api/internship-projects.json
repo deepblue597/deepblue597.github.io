@@ -19,5 +19,12 @@
     "image": "powerApps.png",
     "description": "Create a customized and efficient inventory app for internal business usage in Microsoft PowerApps",
     "tags": ["PowerApps"]
+  },
+  {
+    "id": 4,
+    "name": "River segmentation",
+    "image": "riverseg.png",
+    "description": "Trained a machine learning model for semantic segmentation of river regions, achieving a Dice score of 0.91. Dockerized and added to Kubernetes the full data pipeline including Apache Kafka, MinIO, TimescaleDB, and Grafana.",
+    "tags": ["Docker", "Kubernetes", "python"]
   }
 ]
