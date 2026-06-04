@@ -1,0 +1,970 @@
+---
+import '../styles/global.css';
+
+const timeline = [
+  {
+    year: 'Nov 2021 – Nov 2024',
+    role: 'Software Engineer',
+    org: 'SpaceDot (student space team)',
+    description: 'Built the Angular operator UI to monitor and control the team\'s satellite data transmission system. Containerized the application with Docker, cutting deployment time by 40%.',
+    tags: ['Angular', 'TypeScript', 'Docker'],
+  },
+  {
+    year: 'Jul 2024 – Sept 2024',
+    role: 'Software Engineer Intern',
+    org: 'Technology Without Borders',
+    description: 'Created B2B apps with Microsoft PowerApps, reducing processing time by 98%. Designed an event management app with Flutter & Dart, and built a Chrome extension using Plasmo and Firebase.',
+    tags: ['Flutter', 'Dart', 'PowerApps', 'Firebase'],
+  },
+  {
+    year: 'Jul 2025 – Feb 2026',
+    role: 'MLOps Engineer',
+    org: 'ICS, FORTH',
+    description: 'Trained a semantic segmentation model for river regions (Dice 0.91). Deployed the data pipeline on Kubernetes with Kafka, MinIO, PostgreSQL, and Grafana. Built a full-stack web app for real-time model monitoring.',
+    tags: ['MLOps', 'Kubernetes', 'Kafka', 'Grafana'],
+  },
+  {
+    year: 'Feb 2026 – Present',
+    role: 'Software Engineer',
+    org: 'IIT, NCSR "Demokritos"',
+    description: 'Deployed Open OnDemand with Keycloak OIDC on Rocky Linux 9, exposing Jupyter, VSCode, and RStudio as Apptainer apps. Authored Ansible playbooks provisioning a 3-node Slurm cluster end-to-end. Operationalized Zammad, Outline, and Plane via Docker Compose.',
+    tags: ['Slurm', 'Ansible', 'Open OnDemand', 'Keycloak', 'Apptainer'],
+  },
+];
+
+const projects = [
+  {
+    name: 'Beaver',
+    description: 'A declarative DSL for building ML pipelines on live data streams. Write .bvr files — Beaver generates Python that wires Kafka, Quix Streams, River, and Plotly/Dash together. Includes static validation, model analysis, a unified CLI, and detailed error reporting. Developed as my M.Eng thesis.',
+    tags: ['TextX', 'Jinja', 'Kafka', 'Quix Streams', 'River', 'Python', 'Docker'],
+    status: 'live',
+    icon: '🦫',
+  },
+  {
+    name: 'ESP32 Greenhouse Monitor',
+    description: 'Standalone greenhouse monitor — no PC required after setup. DHT22 reads temperature and humidity; two potentiometers set alert thresholds; readings display on a 16×2 LCD. The ESP32 hosts its own web dashboard and fires Telegram alerts when thresholds are crossed.',
+    tags: ['ESP32', 'C++', 'DHT22', 'Telegram API', 'Embedded'],
+    status: 'live',
+    icon: '🌱',
+  },
+  {
+    name: 'SixPath',
+    description: 'Self-hosted professional network graph tool. Maps people, projects, and relationships through an interactive graph interface.',
+    tags: ['TypeScript', 'Graph', 'Self-hosted'],
+    status: 'live',
+    icon: '🕸️',
+  },
+  {
+    name: 'Pharos AI Factory',
+    description: 'EU-funded Greek national AI infrastructure. Building the platform layer connecting researchers to compute — HPC, Open OnDemand, identity management, and cloud-native services.',
+    tags: ['EU', 'AI', 'HPC', 'Infrastructure'],
+    status: 'building',
+    icon: '🏛️',
+  },
+];
+
+const skills = [
+  'Python', 'TypeScript', 'C++', 'Java', 'Dart', 'Bash',
+  'Docker', 'Kubernetes', 'Ansible', 'Slurm', 'Apptainer',
+  'Kafka', 'Quix Streams', 'PostgreSQL', 'MinIO', 'Firebase',
+  'Keycloak', 'OpenLDAP', 'Traefik', 'Tailscale',
+  'Grafana', 'Prometheus', 'Zammad',
+];
+
+const homelabCategories = [
+  {
+    name: 'Media',
+    cardClass: 'border-violet-200 bg-violet-50',
+    titleClass: 'text-violet-600',
+    chipClass: 'bg-violet-100 text-violet-700 border-violet-200',
+    dotClass: 'bg-violet-400',
+    col: 'md:col-span-1',
+    apps: ['Jellyfin', 'Sonarr', 'Radarr', 'Prowlarr', 'Jellyseerr', 'qBittorrent', 'Recommendarr'],
+  },
+  {
+    name: 'Photos & Docs',
+    cardClass: 'border-sky-200 bg-sky-50',
+    titleClass: 'text-sky-600',
+    chipClass: 'bg-sky-100 text-sky-700 border-sky-200',
+    dotClass: 'bg-sky-400',
+    col: 'md:col-span-1',
+    apps: ['Immich', 'Paperless', 'BookLore', 'Syncthing', 'File Browser', 'Karakeep'],
+  },
+  {
+    name: 'Infrastructure',
+    cardClass: 'border-amber-200 bg-amber-50',
+    titleClass: 'text-amber-600',
+    chipClass: 'bg-amber-100 text-amber-700 border-amber-200',
+    dotClass: 'bg-amber-400',
+    col: 'md:col-span-2',
+    apps: ['Traefik', 'Pi-hole', 'Portainer', 'Beszel', 'Uptime Kuma', 'n8n'],
+  },
+  {
+    name: 'Finance',
+    cardClass: 'border-emerald-200 bg-emerald-50',
+    titleClass: 'text-emerald-600',
+    chipClass: 'bg-emerald-100 text-emerald-700 border-emerald-200',
+    dotClass: 'bg-emerald-400',
+    col: 'md:col-span-1',
+    apps: ['Actual Budget', 'Ghostfolio'],
+  },
+  {
+    name: 'AI & Storage',
+    cardClass: 'border-indigo-200 bg-indigo-50',
+    titleClass: 'text-indigo-600',
+    chipClass: 'bg-indigo-100 text-indigo-700 border-indigo-200',
+    dotClass: 'bg-indigo-400',
+    col: 'md:col-span-1',
+    apps: ['Open WebUI', 'OpenMediaVault'],
+  },
+];
+
+const floatDurations = [3.2, 3.7, 4.3, 3.5, 4.8];
+const floatDelays    = [0, 0.6, 1.2, 1.8, 0.4, 2.1, 0.9, 1.5, 0.2, 1.9];
+
+const stats = [
+  { value: 25, suffix: '+', label: 'Self-hosted services' },
+  { value: 3, suffix: '', label: 'Node HPC cluster' },
+  { value: 4, suffix: '+', label: 'Years engineering' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iasonas Kakandris — Software Engineer</title>
+    <meta name="description" content="Software Engineer specializing in HPC, MLOps, and cloud-native infrastructure." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body style="font-family: 'Inter', sans-serif;">
+
+    <!-- Cursor glow -->
+    <div id="cursor-glow"
+         style="position:fixed;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,0.13) 0%,transparent 65%);pointer-events:none;z-index:1;opacity:0;transition:opacity 0.5s ease;transform:translate(-50%,-50%);left:0;top:0;">
+    </div>
+
+    <!-- Sticky nav -->
+    <nav id="site-nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+      <div class="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
+        <a href="#" class="text-white font-semibold text-sm tracking-widest uppercase opacity-90 hover:opacity-100 transition-opacity">IK</a>
+        <div class="hidden sm:flex items-center gap-8">
+          <a href="#about"           class="nav-link">About</a>
+          <a href="#cluster-section" class="nav-link">Cluster</a>
+          <a href="#slurm-section"   class="nav-link">HPC</a>
+          <a href="#journey"         class="nav-link">Journey</a>
+          <a href="#projects"        class="nav-link">Projects</a>
+          <a href="#homelab"         class="nav-link">Homelab</a>
+          <a href="#cv"              class="nav-link">CV</a>
+          <a href="#contact"         class="nav-link">Contact</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ── HERO ── -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0f0e17]">
+      <!-- Aurora blobs -->
+      <div class="aurora-blob"></div>
+      <div class="aurora-blob"></div>
+      <div class="aurora-blob"></div>
+
+      <!-- Content -->
+      <div class="relative z-10 text-center px-6 max-w-3xl mx-auto">
+        <p class="text-cyan-400 text-sm font-medium tracking-widest uppercase mb-4 opacity-0 animate-[fadeDown_0.8s_ease_0.2s_forwards]">
+          <span id="typewriter-text">Software Engineer</span><span class="tw-cursor"></span>
+        </p>
+        <h1 class="text-white text-5xl sm:text-7xl font-bold tracking-tight mb-6 opacity-0 animate-[fadeDown_0.8s_ease_0.4s_forwards]">
+          Iasonas<br />
+          <span class="bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+            Kakandris
+          </span>
+        </h1>
+        <p class="text-slate-300 text-lg sm:text-xl leading-relaxed mb-10 opacity-0 animate-[fadeDown_0.8s_ease_0.6s_forwards]">
+          Building infrastructure where AI research meets compute —<br class="hidden sm:block" />
+          HPC clusters, MLOps pipelines, and self-hosted systems.
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center opacity-0 animate-[fadeDown_0.8s_ease_0.8s_forwards]">
+          <a href="#journey"
+             class="px-6 py-3 rounded-full bg-indigo-500 hover:bg-indigo-400 text-white font-medium transition-all duration-200 hover:-translate-y-0.5">
+            My Journey
+          </a>
+          <a href="mailto:ikakandris@gmail.com"
+             class="px-6 py-3 rounded-full border border-white/20 hover:border-white/50 text-white font-medium transition-all duration-200 hover:-translate-y-0.5">
+            Get in touch
+          </a>
+        </div>
+      </div>
+
+      <!-- Scroll indicator — direct child of section so absolute positions to hero bottom -->
+      <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-0 animate-[fadeDown_1s_ease_1.2s_forwards]">
+        <div class="w-px h-10 bg-gradient-to-b from-white/40 to-transparent"></div>
+        <p class="text-white/30 text-xs tracking-widest uppercase">Scroll</p>
+      </div>
+    </section>
+
+    <!-- ── ABOUT ── -->
+    <section id="about" class="py-28 px-6 max-w-4xl mx-auto">
+
+      <!-- Stat counters -->
+      <div class="reveal grid grid-cols-3 gap-6 mb-20 text-center">
+        {stats.map(s => (
+          <div>
+            <p class="text-4xl sm:text-5xl font-bold text-indigo-500 tabular-nums">
+              <span class="stat-counter" data-target={s.value}>0</span>{s.suffix}
+            </p>
+            <p class="text-slate-500 text-sm mt-1">{s.label}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="reveal grid md:grid-cols-2 gap-16 items-center">
+        <div>
+          <p class="text-indigo-500 text-sm font-semibold tracking-widest uppercase mb-3">About</p>
+          <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-6 leading-tight">
+            Infrastructure engineer<br />with a builder's mindset
+          </h2>
+          <p class="text-slate-600 leading-relaxed mb-4">
+            I'm a Software Engineer at IIT, NCSR "Demokritos", working on Pharos — the Greek AI Factory, an EU-funded initiative bringing national AI computing infrastructure to researchers across Greece.
+          </p>
+          <p class="text-slate-600 leading-relaxed mb-4">
+            My work spans HPC cluster administration (Slurm, Open OnDemand, Ansible), MLOps platform engineering, and a self-hosted homelab running 20+ services behind Traefik. I hold an M.Eng from AUTh with a thesis on a declarative DSL for streaming ML pipelines.
+          </p>
+          <p class="text-slate-600 leading-relaxed">
+            Mensa member. Fluent in Greek, English, Italian, and German.
+          </p>
+        </div>
+        <div id="skills-container" style="transition-delay: 0.15s">
+          <p class="text-slate-500 text-sm font-medium mb-4 uppercase tracking-widest">Stack</p>
+          <div class="flex flex-wrap gap-2">
+            {skills.map((s, i) => (
+              <span
+                class="chip-reveal px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 text-sm font-medium hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200 cursor-default"
+                style={`transition-delay: ${i * 0.045}s`}
+              >
+                {s}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CLUSTER VIZ ── -->
+    <section id="cluster-section" class="py-24 bg-[#0f0e17] relative overflow-hidden">
+      <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute w-[500px] h-[500px] rounded-full bg-indigo-700 blur-[140px] opacity-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+      </div>
+      <div class="relative z-10 max-w-4xl mx-auto px-6">
+        <div class="reveal text-center mb-10">
+          <p class="text-cyan-400 text-sm font-semibold tracking-widest uppercase mb-3">Infrastructure</p>
+          <h2 class="text-3xl sm:text-4xl font-bold text-white">Kubernetes cluster</h2>
+          <p class="text-slate-500 mt-3 text-sm max-w-sm mx-auto">
+            k3s with Istio ambient mode — no sidecars, ztunnel handles mTLS at L4
+          </p>
+        </div>
+
+        <div class="reveal flex justify-center">
+          <svg id="cluster-svg" viewBox="0 0 900 440" class="w-full max-w-2xl" aria-hidden="true">
+            <defs>
+              <filter id="pkt-glow" x="-100%" y="-100%" width="300%" height="300%">
+                <feGaussianBlur stdDeviation="3" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <filter id="node-glow-f" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="9" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+
+            <!-- Edges (behind nodes) -->
+            <line x1="450" y1="100" x2="140" y2="318" stroke="#6366f1" stroke-width="1.2" opacity="0.22"/>
+            <line x1="450" y1="100" x2="450" y2="372" stroke="#6366f1" stroke-width="1.2" opacity="0.22"/>
+            <line x1="450" y1="100" x2="760" y2="318" stroke="#6366f1" stroke-width="1.2" opacity="0.22"/>
+            <line x1="140" y1="318" x2="450" y2="372" stroke="#06b6d4" stroke-width="1"   opacity="0.16"/>
+            <line x1="450" y1="372" x2="760" y2="318" stroke="#06b6d4" stroke-width="1"   opacity="0.16"/>
+            <line x1="140" y1="318" x2="760" y2="318" stroke="#06b6d4" stroke-width="1"   opacity="0.16"/>
+
+            <!-- 12 packets (JS sets cx/cy/opacity) — 2 per edge, both directions -->
+            <circle class="k8s-pkt" r="4"   fill="#818cf8" filter="url(#pkt-glow)" opacity="0"/>
+            <circle class="k8s-pkt" r="4"   fill="#818cf8" filter="url(#pkt-glow)" opacity="0"/>
+            <circle class="k8s-pkt" r="4"   fill="#818cf8" filter="url(#pkt-glow)" opacity="0"/>
+            <circle class="k8s-pkt" r="4"   fill="#818cf8" filter="url(#pkt-glow)" opacity="0"/>
+            <circle class="k8s-pkt" r="4"   fill="#818cf8" filter="url(#pkt-glow)" opacity="0"/>
+            <circle class="k8s-pkt" r="4"   fill="#818cf8" filter="url(#pkt-glow)" opacity="0"/>
+            <circle class="k8s-pkt" r="3.5" fill="#67e8f9" filter="url(#pkt-glow)" opacity="0"/>
+            <circle class="k8s-pkt" r="3.5" fill="#67e8f9" filter="url(#pkt-glow)" opacity="0"/>
+            <circle class="k8s-pkt" r="3.5" fill="#67e8f9" filter="url(#pkt-glow)" opacity="0"/>
+            <circle class="k8s-pkt" r="3.5" fill="#67e8f9" filter="url(#pkt-glow)" opacity="0"/>
+            <circle class="k8s-pkt" r="3.5" fill="#67e8f9" filter="url(#pkt-glow)" opacity="0"/>
+            <circle class="k8s-pkt" r="3.5" fill="#67e8f9" filter="url(#pkt-glow)" opacity="0"/>
+
+            <!-- ── control-plane ── -->
+            <g transform="translate(450,100)">
+              <circle r="46" fill="rgba(99,102,241,0.07)" stroke="rgba(99,102,241,0.14)" stroke-width="1"/>
+              <circle r="30" fill="rgba(15,14,23,0.97)" stroke="rgba(99,102,241,0.75)" stroke-width="1.8" filter="url(#node-glow-f)"/>
+              <!-- CPU icon -->
+              <rect x="-10" y="-10" width="20" height="20" rx="2.5" fill="none" stroke="#818cf8" stroke-width="1.4"/>
+              <rect x="-5.5" y="-5.5" width="11" height="11" rx="1.5" fill="#6366f1" opacity="0.3"/>
+              <line x1="-14" y1="-5" x2="-10" y2="-5" stroke="#818cf8" stroke-width="1.2"/>
+              <line x1="-14" y1="0"  x2="-10" y2="0"  stroke="#818cf8" stroke-width="1.2"/>
+              <line x1="-14" y1="5"  x2="-10" y2="5"  stroke="#818cf8" stroke-width="1.2"/>
+              <line x1="10"  y1="-5" x2="14"  y2="-5" stroke="#818cf8" stroke-width="1.2"/>
+              <line x1="10"  y1="0"  x2="14"  y2="0"  stroke="#818cf8" stroke-width="1.2"/>
+              <line x1="10"  y1="5"  x2="14"  y2="5"  stroke="#818cf8" stroke-width="1.2"/>
+              <text y="54" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">control-plane</text>
+            </g>
+
+            <!-- ── worker-01 ── -->
+            <g transform="translate(140,318)">
+              <circle r="38" fill="rgba(6,182,212,0.05)" stroke="rgba(6,182,212,0.12)" stroke-width="1"/>
+              <circle r="26" fill="rgba(15,14,23,0.97)" stroke="rgba(6,182,212,0.6)" stroke-width="1.5"/>
+              <rect x="-10" y="-9"  width="20" height="5" rx="1.5" fill="none" stroke="#67e8f9" stroke-width="1.2"/>
+              <rect x="-10" y="-2"  width="20" height="5" rx="1.5" fill="none" stroke="#67e8f9" stroke-width="1.2"/>
+              <rect x="-10" y="5"   width="20" height="5" rx="1.5" fill="none" stroke="#67e8f9" stroke-width="1.2"/>
+              <circle cx="7" cy="-6.5" r="1.5" fill="#67e8f9" opacity="0.7"/>
+              <circle cx="7" cy="0.5"  r="1.5" fill="#67e8f9" opacity="0.7"/>
+              <circle cx="7" cy="7.5"  r="1.5" fill="#67e8f9" opacity="0.7"/>
+              <text y="46" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">worker-01</text>
+            </g>
+
+            <!-- ── worker-02 ── -->
+            <g transform="translate(450,372)">
+              <circle r="38" fill="rgba(6,182,212,0.05)" stroke="rgba(6,182,212,0.12)" stroke-width="1"/>
+              <circle r="26" fill="rgba(15,14,23,0.97)" stroke="rgba(6,182,212,0.6)" stroke-width="1.5"/>
+              <rect x="-10" y="-9"  width="20" height="5" rx="1.5" fill="none" stroke="#67e8f9" stroke-width="1.2"/>
+              <rect x="-10" y="-2"  width="20" height="5" rx="1.5" fill="none" stroke="#67e8f9" stroke-width="1.2"/>
+              <rect x="-10" y="5"   width="20" height="5" rx="1.5" fill="none" stroke="#67e8f9" stroke-width="1.2"/>
+              <circle cx="7" cy="-6.5" r="1.5" fill="#67e8f9" opacity="0.7"/>
+              <circle cx="7" cy="0.5"  r="1.5" fill="#67e8f9" opacity="0.7"/>
+              <circle cx="7" cy="7.5"  r="1.5" fill="#67e8f9" opacity="0.7"/>
+              <text y="46" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">worker-02</text>
+            </g>
+
+            <!-- ── worker-03 ── -->
+            <g transform="translate(760,318)">
+              <circle r="38" fill="rgba(6,182,212,0.05)" stroke="rgba(6,182,212,0.12)" stroke-width="1"/>
+              <circle r="26" fill="rgba(15,14,23,0.97)" stroke="rgba(6,182,212,0.6)" stroke-width="1.5"/>
+              <rect x="-10" y="-9"  width="20" height="5" rx="1.5" fill="none" stroke="#67e8f9" stroke-width="1.2"/>
+              <rect x="-10" y="-2"  width="20" height="5" rx="1.5" fill="none" stroke="#67e8f9" stroke-width="1.2"/>
+              <rect x="-10" y="5"   width="20" height="5" rx="1.5" fill="none" stroke="#67e8f9" stroke-width="1.2"/>
+              <circle cx="7" cy="-6.5" r="1.5" fill="#67e8f9" opacity="0.7"/>
+              <circle cx="7" cy="0.5"  r="1.5" fill="#67e8f9" opacity="0.7"/>
+              <circle cx="7" cy="7.5"  r="1.5" fill="#67e8f9" opacity="0.7"/>
+              <text y="46" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">worker-03</text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Tech tags -->
+        <div class="reveal flex flex-wrap justify-center gap-2 mt-10">
+          {['k3s', 'Istio ambient', 'ArgoCD', 'cert-manager', 'Kyverno', 'Authentik', 'Sealed Secrets', 'Trivy'].map(t => (
+            <span class="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-slate-400 text-xs font-medium hover:border-cyan-400/40 hover:text-cyan-400 transition-colors duration-200 cursor-default">
+              {t}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SLURM CLUSTER VIZ ── -->
+    <section id="slurm-section" class="py-24 bg-[#faf9f6] relative overflow-hidden">
+      <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute w-[500px] h-[500px] rounded-full bg-amber-100 blur-[140px] opacity-60 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+      </div>
+      <div class="relative z-10 max-w-4xl mx-auto px-6">
+        <div class="reveal text-center mb-10">
+          <p class="text-amber-500 text-sm font-semibold tracking-widest uppercase mb-3">HPC</p>
+          <h2 class="text-3xl sm:text-4xl font-bold text-slate-900">Slurm cluster</h2>
+          <p class="text-slate-500 mt-3 text-sm max-w-sm mx-auto">
+            3-node cluster at NCSR "Demokritos" — Open OnDemand exposes Jupyter, VSCode &amp; RStudio as Apptainer apps
+          </p>
+        </div>
+
+        <div class="reveal flex justify-center">
+          <svg id="slurm-svg" viewBox="0 0 800 360" class="w-full max-w-xl" aria-hidden="true">
+            <defs>
+              <filter id="slurm-pkt-glow" x="-100%" y="-100%" width="300%" height="300%">
+                <feGaussianBlur stdDeviation="3" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <filter id="slurm-node-glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="8" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+
+            <!-- Edges -->
+            <line x1="400" y1="88"  x2="185" y2="280" stroke="#f59e0b" stroke-width="1.2" opacity="0.3"/>
+            <line x1="400" y1="88"  x2="615" y2="280" stroke="#f59e0b" stroke-width="1.2" opacity="0.3"/>
+            <line x1="185" y1="280" x2="615" y2="280" stroke="#fb923c" stroke-width="1"   opacity="0.22"/>
+
+            <!-- 6 packets (2 per edge, both directions) -->
+            <circle class="slurm-pkt" r="4"   fill="#fbbf24" filter="url(#slurm-pkt-glow)" opacity="0"/>
+            <circle class="slurm-pkt" r="4"   fill="#fbbf24" filter="url(#slurm-pkt-glow)" opacity="0"/>
+            <circle class="slurm-pkt" r="4"   fill="#fbbf24" filter="url(#slurm-pkt-glow)" opacity="0"/>
+            <circle class="slurm-pkt" r="4"   fill="#fbbf24" filter="url(#slurm-pkt-glow)" opacity="0"/>
+            <circle class="slurm-pkt" r="3.5" fill="#fb923c" filter="url(#slurm-pkt-glow)" opacity="0"/>
+            <circle class="slurm-pkt" r="3.5" fill="#fb923c" filter="url(#slurm-pkt-glow)" opacity="0"/>
+
+            <!-- ── Login / OOD node ── -->
+            <g transform="translate(400,88)">
+              <circle r="46" fill="rgba(245,158,11,0.08)"  stroke="rgba(245,158,11,0.18)" stroke-width="1"/>
+              <circle r="30" fill="rgba(250,249,246,0.97)" stroke="rgba(245,158,11,0.75)" stroke-width="1.8" filter="url(#slurm-node-glow)"/>
+              <!-- Screen icon -->
+              <rect x="-12" y="-10" width="24" height="16" rx="2.5" fill="none" stroke="#f59e0b" stroke-width="1.4"/>
+              <line x1="-4"  y1="6"  x2="4"  y2="6"  stroke="#f59e0b" stroke-width="1.2"/>
+              <line x1="-7"  y1="9"  x2="7"  y2="9"  stroke="#f59e0b" stroke-width="1.2"/>
+              <!-- Scan line inside screen -->
+              <line x1="-8" y1="-3" x2="8" y2="-3" stroke="#fbbf24" stroke-width="1" opacity="0.6"/>
+              <line x1="-8" y1="0"  x2="5" y2="0"  stroke="#fbbf24" stroke-width="1" opacity="0.4"/>
+              <text y="54" text-anchor="middle" fill="#78716c" font-size="12" font-family="Inter,sans-serif">login · OOD</text>
+            </g>
+
+            <!-- ── compute-01 ── -->
+            <g transform="translate(185,280)">
+              <circle r="38" fill="rgba(251,146,60,0.06)" stroke="rgba(251,146,60,0.16)" stroke-width="1"/>
+              <circle r="26" fill="rgba(250,249,246,0.97)" stroke="rgba(251,146,60,0.65)" stroke-width="1.5"/>
+              <!-- Chip icon -->
+              <rect x="-10" y="-10" width="20" height="20" rx="2.5" fill="none" stroke="#fb923c" stroke-width="1.4"/>
+              <rect x="-5.5" y="-5.5" width="11" height="11" rx="1.5" fill="#fb923c" opacity="0.25"/>
+              <line x1="-14" y1="-5" x2="-10" y2="-5" stroke="#fb923c" stroke-width="1.2"/>
+              <line x1="-14" y1="0"  x2="-10" y2="0"  stroke="#fb923c" stroke-width="1.2"/>
+              <line x1="-14" y1="5"  x2="-10" y2="5"  stroke="#fb923c" stroke-width="1.2"/>
+              <line x1="10"  y1="-5" x2="14"  y2="-5" stroke="#fb923c" stroke-width="1.2"/>
+              <line x1="10"  y1="0"  x2="14"  y2="0"  stroke="#fb923c" stroke-width="1.2"/>
+              <line x1="10"  y1="5"  x2="14"  y2="5"  stroke="#fb923c" stroke-width="1.2"/>
+              <text y="46" text-anchor="middle" fill="#78716c" font-size="12" font-family="Inter,sans-serif">compute-01</text>
+            </g>
+
+            <!-- ── compute-02 ── -->
+            <g transform="translate(615,280)">
+              <circle r="38" fill="rgba(251,146,60,0.06)" stroke="rgba(251,146,60,0.16)" stroke-width="1"/>
+              <circle r="26" fill="rgba(250,249,246,0.97)" stroke="rgba(251,146,60,0.65)" stroke-width="1.5"/>
+              <rect x="-10" y="-10" width="20" height="20" rx="2.5" fill="none" stroke="#fb923c" stroke-width="1.4"/>
+              <rect x="-5.5" y="-5.5" width="11" height="11" rx="1.5" fill="#fb923c" opacity="0.25"/>
+              <line x1="-14" y1="-5" x2="-10" y2="-5" stroke="#fb923c" stroke-width="1.2"/>
+              <line x1="-14" y1="0"  x2="-10" y2="0"  stroke="#fb923c" stroke-width="1.2"/>
+              <line x1="-14" y1="5"  x2="-10" y2="5"  stroke="#fb923c" stroke-width="1.2"/>
+              <line x1="10"  y1="-5" x2="14"  y2="-5" stroke="#fb923c" stroke-width="1.2"/>
+              <line x1="10"  y1="0"  x2="14"  y2="0"  stroke="#fb923c" stroke-width="1.2"/>
+              <line x1="10"  y1="5"  x2="14"  y2="5"  stroke="#fb923c" stroke-width="1.2"/>
+              <text y="46" text-anchor="middle" fill="#78716c" font-size="12" font-family="Inter,sans-serif">compute-02</text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Tech tags -->
+        <div class="reveal flex flex-wrap justify-center gap-2 mt-10">
+          {['Slurm', 'Open OnDemand', 'Apptainer', 'Ansible', 'MUNGE', 'ColdFront', 'SSSD / LDAP', 'MariaDB'].map(t => (
+            <span class="px-3 py-1.5 rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-xs font-medium hover:bg-amber-100 transition-colors duration-200 cursor-default">
+              {t}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── JOURNEY ── -->
+    <section id="journey" class="py-28 px-6 bg-slate-50">
+      <div class="max-w-3xl mx-auto">
+        <div class="reveal text-center mb-20">
+          <p class="text-indigo-500 text-sm font-semibold tracking-widest uppercase mb-3">Experience</p>
+          <h2 class="text-3xl sm:text-4xl font-bold text-slate-900">The journey so far</h2>
+        </div>
+
+        <div class="relative">
+          <!-- Vertical line — draws down on scroll -->
+          <div id="timeline-line" class="absolute left-6 top-0 bottom-0 w-px timeline-line md:left-1/2"
+               style="transform: scaleY(0); transform-origin: top; transition: transform 1.6s cubic-bezier(0.16,1,0.3,1);"></div>
+
+          {timeline.map((item, i) => (
+            <div class={`reveal relative flex gap-8 mb-14 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}
+                 style={`transition-delay: ${i * 0.1}s`}>
+              <!-- Dot -->
+              <div class="absolute left-6 w-3 h-3 rounded-full bg-indigo-500 border-2 border-white shadow -translate-x-1/2 mt-1.5 md:left-1/2 z-10"></div>
+
+              <!-- Card -->
+              <div class={`ml-14 md:ml-0 md:w-[45%] ${i % 2 === 0 ? 'md:mr-auto md:pr-8' : 'md:ml-auto md:pl-8'}`}>
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+                  <p class="text-indigo-500 text-xs font-semibold tracking-widest uppercase mb-1">{item.year}</p>
+                  <h3 class="text-slate-900 font-semibold text-lg mb-0.5">{item.role}</h3>
+                  <p class="text-slate-500 text-sm font-medium mb-3">{item.org}</p>
+                  <p class="text-slate-600 text-sm leading-relaxed mb-4">{item.description}</p>
+                  <div class="flex flex-wrap gap-1.5">
+                    {item.tags.map(t => (
+                      <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-500 text-xs font-medium">{t}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PROJECTS ── -->
+    <section id="projects" class="py-28 px-6 bg-[#0f0e17] relative overflow-hidden">
+      <!-- Subtle bg blobs -->
+      <div class="absolute inset-0 opacity-20 pointer-events-none">
+        <div class="absolute w-96 h-96 rounded-full bg-indigo-600 blur-3xl top-0 right-0 -translate-y-1/2 translate-x-1/2"></div>
+        <div class="absolute w-96 h-96 rounded-full bg-cyan-600 blur-3xl bottom-0 left-0 translate-y-1/2 -translate-x-1/2"></div>
+      </div>
+
+      <div class="relative z-10 max-w-5xl mx-auto">
+        <div class="reveal text-center mb-16">
+          <p class="text-cyan-400 text-sm font-semibold tracking-widest uppercase mb-3">Projects</p>
+          <h2 class="text-3xl sm:text-4xl font-bold text-white">Things I've built & run</h2>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-6">
+          {projects.map((p, i) => (
+            <div class="reveal glass-card rounded-2xl p-6 hover:-translate-y-1 hover:border-white/30 transition-all duration-300"
+                 style={`transition-delay: ${i * 0.1}s`}>
+              <div class="flex items-start justify-between mb-4">
+                <span class="text-3xl">{p.icon}</span>
+                <span class={`text-xs font-semibold px-2.5 py-1 rounded-full ${
+                  p.status === 'live'
+                    ? 'bg-emerald-500/20 text-emerald-400'
+                    : 'bg-amber-500/20 text-amber-400'
+                }`}>
+                  {p.status === 'live' ? '● Live' : '◐ Building'}
+                </span>
+              </div>
+              <h3 class="text-white font-semibold text-lg mb-2">{p.name}</h3>
+              <p class="text-slate-400 text-sm leading-relaxed mb-4">{p.description}</p>
+              <div class="flex flex-wrap gap-1.5">
+                {p.tags.map(t => (
+                  <span class="px-2 py-0.5 rounded bg-white/10 text-slate-300 text-xs font-medium">{t}</span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── HOMELAB ── -->
+    <section id="homelab" class="py-28 px-6 bg-[#faf9f6]">
+      <div class="max-w-5xl mx-auto">
+        <div class="reveal text-center mb-16">
+          <p class="text-indigo-500 text-sm font-semibold tracking-widest uppercase mb-3">Homelab</p>
+          <h2 class="text-3xl sm:text-4xl font-bold text-slate-900">Self-hosted stack</h2>
+          <p class="text-slate-500 mt-3 text-sm max-w-sm mx-auto">
+            25+ Dockerized services across 2 machines — Traefik reverse proxy, Cloudflare DNS
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-5">
+          {homelabCategories.map((cat, ci) => (
+            <div
+              class={`reveal rounded-2xl border p-6 ${cat.cardClass} ${cat.col}`}
+              style={`transition-delay: ${ci * 0.09}s`}
+            >
+              <div class="flex items-center gap-2 mb-5">
+                <span class={`w-2 h-2 rounded-full ${cat.dotClass}`}></span>
+                <p class={`text-xs font-bold tracking-widest uppercase ${cat.titleClass}`}>{cat.name}</p>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                {cat.apps.map((app, ai) => (
+                  <span
+                    class={`px-3 py-1.5 rounded-full border text-xs font-medium select-none ${cat.chipClass}`}
+                    style={`animation: bubble-float ${floatDurations[ai % 5]}s ease-in-out ${floatDelays[ai % 10]}s infinite`}
+                  >
+                    {app}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CV ── -->
+    <section id="cv" class="py-24 px-6 bg-[#0f0e17] relative overflow-hidden">
+      <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute w-[500px] h-[500px] rounded-full bg-indigo-700 blur-[140px] opacity-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"></div>
+      </div>
+      <div class="relative z-10 max-w-xl mx-auto text-center">
+        <div class="reveal inline-flex flex-col items-center">
+
+          <!-- Document icon -->
+          <div class="mb-8 relative">
+            <div class="w-20 h-24 rounded-xl border border-white/15 bg-white/5 flex items-end justify-center pb-3 relative">
+              <!-- Page lines -->
+              <div class="absolute top-5 left-4 right-4 space-y-2">
+                <div class="h-px bg-white/20 rounded"></div>
+                <div class="h-px bg-white/20 rounded"></div>
+                <div class="h-px bg-white/20 w-3/4 rounded"></div>
+                <div class="h-px bg-white/20 rounded"></div>
+                <div class="h-px bg-white/20 w-2/3 rounded"></div>
+                <div class="h-px bg-white/20 rounded"></div>
+              </div>
+              <!-- Fold corner -->
+              <div class="absolute top-0 right-0 w-5 h-5 border-b border-l border-white/20 bg-[#0f0e17]" style="border-radius: 0 8px 0 0;"></div>
+              <div class="absolute top-0 right-0 w-5 h-5" style="background:linear-gradient(225deg,rgba(255,255,255,0.08) 50%,transparent 50%);border-radius:0 8px 0 0;"></div>
+            </div>
+            <!-- Glow under doc -->
+            <div class="absolute -bottom-3 left-1/2 -translate-x-1/2 w-16 h-3 bg-indigo-500/30 blur-md rounded-full"></div>
+          </div>
+
+          <p class="text-cyan-400 text-xs font-semibold tracking-widest uppercase mb-3">Curriculum Vitae</p>
+          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-2">Iasonas Kakandris</h2>
+          <p class="text-slate-400 text-sm mb-8">Software Engineer · MLOps · HPC Infrastructure</p>
+          <p class="text-slate-600 text-xs mb-10 tracking-wide">Updated Apr 2026</p>
+
+          <div class="flex flex-wrap gap-4 justify-center">
+            <a
+              href="/cv.pdf"
+              download="Iasonas_Kakandris_CV.pdf"
+              class="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-indigo-500 hover:bg-indigo-400 text-white font-medium transition-all duration-200 hover:-translate-y-0.5"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Download PDF
+            </a>
+            <a
+              href="/cv.pdf"
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center gap-2 px-7 py-3 rounded-full border border-white/20 hover:border-white/50 text-white font-medium transition-all duration-200 hover:-translate-y-0.5"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+              View online
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CONTACT ── -->
+    <section id="contact" class="py-28 px-6 max-w-2xl mx-auto text-center">
+      <div class="reveal">
+        <p class="text-indigo-500 text-sm font-semibold tracking-widest uppercase mb-3">Contact</p>
+        <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-6">Let's talk</h2>
+        <p class="text-slate-600 leading-relaxed mb-10">
+          Whether it's infrastructure, MLOps, or just a good conversation about self-hosting — reach out.
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center">
+          <a href="mailto:ikakandris@gmail.com"
+             class="px-6 py-3 rounded-full bg-indigo-500 hover:bg-indigo-400 text-white font-medium transition-all duration-200 hover:-translate-y-0.5">
+            ikakandris@gmail.com
+          </a>
+          <a href="https://github.com/deepblue597" target="_blank" rel="noopener"
+             class="px-6 py-3 rounded-full border border-slate-200 hover:border-indigo-300 text-slate-700 hover:text-indigo-600 font-medium transition-all duration-200 hover:-translate-y-0.5">
+            GitHub
+          </a>
+          <a href="https://www.linkedin.com/in/iasonas-kakandris/" target="_blank" rel="noopener"
+             class="px-6 py-3 rounded-full border border-slate-200 hover:border-indigo-300 text-slate-700 hover:text-indigo-600 font-medium transition-all duration-200 hover:-translate-y-0.5">
+            LinkedIn
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FOOTER ── -->
+    <footer class="py-8 text-center text-slate-400 text-sm border-t border-slate-100">
+      <p>Built with Astro · Thessaloniki, Greece</p>
+    </footer>
+
+    <script>
+      // ── Scroll reveal ──
+      const revealObserver = new IntersectionObserver(
+        (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+        { threshold: 0.1 }
+      );
+      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+      // ── Skill chip cascade ──
+      const chipObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.querySelectorAll('.chip-reveal').forEach(chip => chip.classList.add('visible'));
+              chipObserver.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.2 }
+      );
+      const skillsContainer = document.getElementById('skills-container');
+      if (skillsContainer) chipObserver.observe(skillsContainer);
+
+      // ── Timeline line draw ──
+      const timelineLine = document.getElementById('timeline-line');
+      if (timelineLine) {
+        const lineObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach(e => {
+              if (e.isIntersecting) {
+                timelineLine.style.transform = 'scaleY(1)';
+                lineObserver.unobserve(timelineLine);
+              }
+            });
+          },
+          { threshold: 0.1 }
+        );
+        lineObserver.observe(timelineLine);
+      }
+
+      // ── Stat counters ──
+      function animateCounter(el: HTMLElement) {
+        const target = parseInt(el.dataset.target ?? '0', 10);
+        const duration = 1400;
+        const start = performance.now();
+        function step(now: number) {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = String(Math.floor(eased * target));
+          if (progress < 1) requestAnimationFrame(step);
+          else el.textContent = String(target);
+        }
+        requestAnimationFrame(step);
+      }
+
+      const counterObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting) {
+              e.target.querySelectorAll<HTMLElement>('.stat-counter').forEach(animateCounter);
+              counterObserver.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.5 }
+      );
+      document.querySelectorAll('.stat-counter').forEach(el => {
+        const parent = el.closest('.reveal') ?? el.parentElement;
+        if (parent) counterObserver.observe(parent);
+      });
+
+      // ── Typewriter ──
+      const roles = ['Software Engineer', 'MLOps Engineer', 'HPC Enthusiast', 'Homelab Operator'];
+      const twEl = document.getElementById('typewriter-text');
+      if (twEl) {
+        let roleIdx = 0;
+        let charIdx = roles[0].length;
+        let deleting = false;
+
+        function tick() {
+          const current = roles[roleIdx];
+          if (!deleting) {
+            twEl.textContent = current.slice(0, charIdx);
+            if (charIdx === current.length) {
+              setTimeout(() => { deleting = true; tick(); }, 2200);
+              return;
+            }
+            charIdx++;
+            setTimeout(tick, 80);
+          } else {
+            twEl.textContent = current.slice(0, charIdx);
+            if (charIdx === 0) {
+              deleting = false;
+              roleIdx = (roleIdx + 1) % roles.length;
+              charIdx = 0;
+              setTimeout(tick, 300);
+              return;
+            }
+            charIdx--;
+            setTimeout(tick, 45);
+          }
+        }
+
+        // Start after hero fade-in completes
+        setTimeout(tick, 1800);
+      }
+
+      // ── Slurm cluster animation ──
+      (function () {
+        const svg = document.getElementById('slurm-svg');
+        if (!svg) return;
+
+        const nodes = [
+          { x: 400, y: 88  },  // login/OOD
+          { x: 185, y: 280 },  // compute-01
+          { x: 615, y: 280 },  // compute-02
+        ];
+
+        const edgeDirs = [
+          [0,1],[1,0],
+          [0,2],[2,0],
+          [1,2],[2,1],
+        ];
+
+        const state = edgeDirs.map(([from, to]) => ({
+          from, to,
+          t: Math.random(),
+          speed: 0.003 + Math.random() * 0.003,
+        }));
+
+        const pktEls = Array.from(svg.querySelectorAll('.slurm-pkt')) as SVGCircleElement[];
+
+        function frame() {
+          state.forEach((p, i) => {
+            p.t += p.speed;
+            if (p.t > 1) p.t -= 1;
+            const a = nodes[p.from], b = nodes[p.to];
+            pktEls[i]?.setAttribute('cx', (a.x + (b.x - a.x) * p.t).toFixed(1));
+            pktEls[i]?.setAttribute('cy', (a.y + (b.y - a.y) * p.t).toFixed(1));
+            pktEls[i]?.setAttribute('opacity', '0.88');
+          });
+          requestAnimationFrame(frame);
+        }
+
+        new IntersectionObserver((entries, obs) => {
+          if (entries[0].isIntersecting) { frame(); obs.disconnect(); }
+        }, { threshold: 0.2 }).observe(document.getElementById('slurm-section')!);
+      })();
+
+      // ── Sticky nav ──
+      const nav = document.getElementById('site-nav') as HTMLElement;
+      const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.nav-link'));
+
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 60) {
+          nav.style.cssText += 'background:rgba(15,14,23,0.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.07);';
+        } else {
+          nav.style.cssText += 'background:transparent;backdrop-filter:none;border-bottom:1px solid transparent;';
+        }
+      }, { passive: true });
+
+      // Active section highlight
+      const sectionIds = ['about', 'cluster-section', 'slurm-section', 'journey', 'projects', 'homelab', 'cv', 'contact'];
+      const sectionEls = sectionIds.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[];
+
+      const navObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          const link = navLinks.find(l => l.getAttribute('href') === '#' + e.target.id);
+          if (link) link.classList.toggle('active', e.isIntersecting);
+        });
+      }, { threshold: 0.35 });
+      sectionEls.forEach(el => navObserver.observe(el));
+
+      // ── Cursor glow ──
+      const glow = document.getElementById('cursor-glow') as HTMLElement;
+      let gx = 0, gy = 0, mx = 0, my = 0;
+
+      window.addEventListener('mousemove', e => {
+        mx = e.clientX; my = e.clientY;
+        glow.style.opacity = '1';
+      }, { passive: true });
+      window.addEventListener('mouseleave', () => { glow.style.opacity = '0'; }, { passive: true });
+
+      (function lerpGlow() {
+        gx += (mx - gx) * 0.08;
+        gy += (my - gy) * 0.08;
+        glow.style.left = gx + 'px';
+        glow.style.top  = gy + 'px';
+        requestAnimationFrame(lerpGlow);
+      })();
+
+      // ── Kubernetes cluster animation ──
+      (function () {
+        const svg = document.getElementById('cluster-svg');
+        if (!svg) return;
+
+        const nodes = [
+          { x: 450, y: 100 },  // control-plane
+          { x: 140, y: 318 },  // worker-01
+          { x: 450, y: 372 },  // worker-02
+          { x: 760, y: 318 },  // worker-03
+        ];
+
+        // 12 directed edges (2 per undirected edge, both directions)
+        const edgeDirs = [
+          [0,1],[1,0],
+          [0,2],[2,0],
+          [0,3],[3,0],
+          [1,2],[2,1],
+          [2,3],[3,2],
+          [1,3],[3,1],
+        ];
+
+        const state = edgeDirs.map(([from, to]) => ({
+          from, to,
+          t: Math.random(),
+          speed: 0.0022 + Math.random() * 0.0028,
+        }));
+
+        const pktEls = Array.from(
+          svg.querySelectorAll('.k8s-pkt')
+        ) as SVGCircleElement[];
+
+        function frame() {
+          state.forEach((p, i) => {
+            p.t += p.speed;
+            if (p.t > 1) p.t -= 1;
+            const a = nodes[p.from];
+            const b = nodes[p.to];
+            pktEls[i]?.setAttribute('cx', (a.x + (b.x - a.x) * p.t).toFixed(1));
+            pktEls[i]?.setAttribute('cy', (a.y + (b.y - a.y) * p.t).toFixed(1));
+            pktEls[i]?.setAttribute('opacity', '0.88');
+          });
+          requestAnimationFrame(frame);
+        }
+
+        const section = document.getElementById('cluster-section');
+        if (section) {
+          new IntersectionObserver((entries, obs) => {
+            if (entries[0].isIntersecting) {
+              frame();
+              obs.disconnect();
+            }
+          }, { threshold: 0.2 }).observe(section);
+        }
+      })();
+    </script>
+
+    <style>
+      @keyframes fadeDown {
+        from { opacity: 0; transform: translateY(-16px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes bubble-float {
+        0%, 100% { transform: translateY(0)    scale(1);    }
+        50%       { transform: translateY(-8px) scale(1.04); }
+      }
+
+      .nav-link {
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: rgba(255,255,255,0.55);
+        letter-spacing: 0.04em;
+        transition: color 0.2s ease;
+        text-decoration: none;
+        position: relative;
+      }
+      .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        width: 0;
+        height: 1.5px;
+        background: #818cf8;
+        transition: width 0.25s ease;
+      }
+      .nav-link:hover,
+      .nav-link.active {
+        color: rgba(255,255,255,0.95);
+      }
+      .nav-link.active::after,
+      .nav-link:hover::after {
+        width: 100%;
+      }
+    </style>
+
+  </body>
+</html>
