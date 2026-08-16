@@ -124,7 +124,7 @@ const floatDelays    = [0, 0.6, 1.2, 1.8, 0.4, 2.1, 0.9, 1.5, 0.2, 1.9];
 
 const stats = [
   { value: 25, suffix: '+', label: 'Self-hosted services' },
-  { value: 3, suffix: '', label: 'Node HPC cluster' },
+  //{ value: 3, suffix: '', label: 'Node HPC cluster' },
   { value: 4, suffix: '+', label: 'Years engineering' },
 ];
 ---
@@ -155,7 +155,8 @@ const stats = [
         <div class="hidden sm:flex items-center gap-8">
           <a href="#about"           class="nav-link">About</a>
           <a href="#cluster-section" class="nav-link">Cluster</a>
-          <a href="#slurm-section"   class="nav-link">HPC</a>
+          {/* HPC nav link — bring back once the Slurm section is finished
+          <a href="#slurm-section"   class="nav-link">HPC</a> */}
           <a href="#journey"         class="nav-link">Journey</a>
           <a href="#projects"        class="nav-link">Projects</a>
           <a href="#homelab"         class="nav-link">Homelab</a>
@@ -210,7 +211,7 @@ const stats = [
     <section id="about" class="py-28 px-6 max-w-4xl mx-auto">
 
       <!-- Stat counters -->
-      <div class="reveal grid grid-cols-3 gap-6 mb-20 text-center">
+      <div class="reveal flex flex-wrap justify-center gap-16 mb-20 text-center">
         {stats.map(s => (
           <div>
             <p class="text-4xl sm:text-5xl font-bold text-indigo-500 tabular-nums">
@@ -262,13 +263,13 @@ const stats = [
         <div class="reveal text-center mb-10">
           <p class="text-cyan-400 text-sm font-semibold tracking-widest uppercase mb-3">Infrastructure</p>
           <h2 class="text-3xl sm:text-4xl font-bold text-white">Kubernetes cluster</h2>
-          <p class="text-slate-500 mt-3 text-sm max-w-sm mx-auto">
-            k3s with Istio ambient mode — no sidecars, ztunnel handles mTLS at L4
+          <p class="text-slate-500 mt-3 text-sm max-w-md mx-auto">
+            Every request passes through Authentik, ztunnel mTLS, and Kyverno policy before it reaches a pod
           </p>
         </div>
 
         <div class="reveal flex justify-center">
-          <svg id="cluster-svg" viewBox="0 0 900 440" class="w-full max-w-2xl" aria-hidden="true">
+          <svg id="cluster-svg" viewBox="0 0 900 260" class="w-full max-w-2xl" aria-hidden="true">
             <defs>
               <filter id="pkt-glow" x="-100%" y="-100%" width="300%" height="300%">
                 <feGaussianBlur stdDeviation="3" result="blur"/>
@@ -280,81 +281,77 @@ const stats = [
               </filter>
             </defs>
 
-            <!-- Edges (behind nodes) -->
-            <line x1="450" y1="100" x2="140" y2="318" stroke="#6366f1" stroke-width="1.2" opacity="0.22"/>
-            <line x1="450" y1="100" x2="450" y2="372" stroke="#6366f1" stroke-width="1.2" opacity="0.22"/>
-            <line x1="450" y1="100" x2="760" y2="318" stroke="#6366f1" stroke-width="1.2" opacity="0.22"/>
-            <line x1="140" y1="318" x2="450" y2="372" stroke="#06b6d4" stroke-width="1"   opacity="0.16"/>
-            <line x1="450" y1="372" x2="760" y2="318" stroke="#06b6d4" stroke-width="1"   opacity="0.16"/>
-            <line x1="140" y1="318" x2="760" y2="318" stroke="#06b6d4" stroke-width="1"   opacity="0.16"/>
+            <!-- Wire -->
+            <line x1="90" y1="130" x2="794" y2="130" stroke="#6366f1" stroke-width="1.2" opacity="0.2"/>
 
-            <!-- 12 packets (JS sets cx/cy/opacity) — 2 per edge, both directions -->
-            <circle class="k8s-pkt" r="4"   fill="#818cf8" filter="url(#pkt-glow)" opacity="0"/>
-            <circle class="k8s-pkt" r="4"   fill="#818cf8" filter="url(#pkt-glow)" opacity="0"/>
-            <circle class="k8s-pkt" r="4"   fill="#818cf8" filter="url(#pkt-glow)" opacity="0"/>
-            <circle class="k8s-pkt" r="4"   fill="#818cf8" filter="url(#pkt-glow)" opacity="0"/>
-            <circle class="k8s-pkt" r="4"   fill="#818cf8" filter="url(#pkt-glow)" opacity="0"/>
-            <circle class="k8s-pkt" r="4"   fill="#818cf8" filter="url(#pkt-glow)" opacity="0"/>
-            <circle class="k8s-pkt" r="3.5" fill="#67e8f9" filter="url(#pkt-glow)" opacity="0"/>
-            <circle class="k8s-pkt" r="3.5" fill="#67e8f9" filter="url(#pkt-glow)" opacity="0"/>
-            <circle class="k8s-pkt" r="3.5" fill="#67e8f9" filter="url(#pkt-glow)" opacity="0"/>
-            <circle class="k8s-pkt" r="3.5" fill="#67e8f9" filter="url(#pkt-glow)" opacity="0"/>
-            <circle class="k8s-pkt" r="3.5" fill="#67e8f9" filter="url(#pkt-glow)" opacity="0"/>
-            <circle class="k8s-pkt" r="3.5" fill="#67e8f9" filter="url(#pkt-glow)" opacity="0"/>
+            <!-- Traveling request/response token -->
+            <polygon id="k8s-token" points="-6,-4 6,0 -6,4" fill="#818cf8" filter="url(#pkt-glow)" opacity="0.95"/>
 
-            <!-- ── control-plane ── -->
-            <g transform="translate(450,100)">
-              <circle r="46" fill="rgba(99,102,241,0.07)" stroke="rgba(99,102,241,0.14)" stroke-width="1"/>
-              <circle r="30" fill="rgba(15,14,23,0.97)" stroke="rgba(99,102,241,0.75)" stroke-width="1.8" filter="url(#node-glow-f)"/>
-              <!-- CPU icon -->
-              <rect x="-10" y="-10" width="20" height="20" rx="2.5" fill="none" stroke="#818cf8" stroke-width="1.4"/>
-              <rect x="-5.5" y="-5.5" width="11" height="11" rx="1.5" fill="#6366f1" opacity="0.3"/>
-              <line x1="-14" y1="-5" x2="-10" y2="-5" stroke="#818cf8" stroke-width="1.2"/>
-              <line x1="-14" y1="0"  x2="-10" y2="0"  stroke="#818cf8" stroke-width="1.2"/>
-              <line x1="-14" y1="5"  x2="-10" y2="5"  stroke="#818cf8" stroke-width="1.2"/>
-              <line x1="10"  y1="-5" x2="14"  y2="-5" stroke="#818cf8" stroke-width="1.2"/>
-              <line x1="10"  y1="0"  x2="14"  y2="0"  stroke="#818cf8" stroke-width="1.2"/>
-              <line x1="10"  y1="5"  x2="14"  y2="5"  stroke="#818cf8" stroke-width="1.2"/>
-              <text y="54" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">control-plane</text>
+            <!-- ── client ── -->
+            <g transform="translate(70,130)">
+              <circle class="client-ring" r="27" fill="none" stroke="#67e8f9" stroke-width="1.5" opacity="0"/>
+              <circle r="20" fill="rgba(15,14,23,0.97)" stroke="#64748b" stroke-width="1.5"/>
+              <circle cx="0" cy="-3" r="3.4" fill="none" stroke="#94a3b8" stroke-width="1.3"/>
+              <path d="M-7,7 a7,6.5 0 0 1 14,0 Z" fill="none" stroke="#94a3b8" stroke-width="1.3"/>
+              <text y="34" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">client</text>
             </g>
 
-            <!-- ── worker-01 ── -->
-            <g transform="translate(140,318)">
-              <circle r="38" fill="rgba(6,182,212,0.05)" stroke="rgba(6,182,212,0.12)" stroke-width="1"/>
-              <circle r="26" fill="rgba(15,14,23,0.97)" stroke="rgba(6,182,212,0.6)" stroke-width="1.5"/>
-              <rect x="-10" y="-9"  width="20" height="5" rx="1.5" fill="none" stroke="#67e8f9" stroke-width="1.2"/>
-              <rect x="-10" y="-2"  width="20" height="5" rx="1.5" fill="none" stroke="#67e8f9" stroke-width="1.2"/>
-              <rect x="-10" y="5"   width="20" height="5" rx="1.5" fill="none" stroke="#67e8f9" stroke-width="1.2"/>
-              <circle cx="7" cy="-6.5" r="1.5" fill="#67e8f9" opacity="0.7"/>
-              <circle cx="7" cy="0.5"  r="1.5" fill="#67e8f9" opacity="0.7"/>
-              <circle cx="7" cy="7.5"  r="1.5" fill="#67e8f9" opacity="0.7"/>
-              <text y="46" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">worker-01</text>
+            <!-- ── Authentik (auth gate) ── -->
+            <g class="k8s-gate" data-gate="authentik" transform="translate(255,130)">
+              <circle class="gate-ring" r="34" fill="none" stroke="#475569" stroke-width="1.5" opacity="0.35"/>
+              <circle r="26" fill="rgba(15,14,23,0.97)" stroke="#818cf8" stroke-width="1.5" filter="url(#node-glow-f)"/>
+              <!-- shield icon -->
+              <path d="M0,-12 L10,-7 V2 C10,9 5,13 0,15 C-5,13 -10,9 -10,2 V-7 Z" fill="rgba(129,140,248,0.14)" stroke="#818cf8" stroke-width="1.4"/>
+              <circle cx="0" cy="-1" r="2.4" fill="none" stroke="#818cf8" stroke-width="1.2"/>
+              <line x1="0" y1="1.4" x2="0" y2="5" stroke="#818cf8" stroke-width="1.2"/>
+              <text y="46" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">Authentik</text>
+              <text y="59" text-anchor="middle" fill="#64748b" font-size="9" font-family="Inter,sans-serif">auth</text>
+              <g class="gate-check" opacity="0" transform="translate(20,-20)">
+                <circle r="8" fill="#10b981"/>
+                <path d="M-3.5,0 L-1,3 L4,-3.5" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
             </g>
 
-            <!-- ── worker-02 ── -->
-            <g transform="translate(450,372)">
-              <circle r="38" fill="rgba(6,182,212,0.05)" stroke="rgba(6,182,212,0.12)" stroke-width="1"/>
-              <circle r="26" fill="rgba(15,14,23,0.97)" stroke="rgba(6,182,212,0.6)" stroke-width="1.5"/>
-              <rect x="-10" y="-9"  width="20" height="5" rx="1.5" fill="none" stroke="#67e8f9" stroke-width="1.2"/>
-              <rect x="-10" y="-2"  width="20" height="5" rx="1.5" fill="none" stroke="#67e8f9" stroke-width="1.2"/>
-              <rect x="-10" y="5"   width="20" height="5" rx="1.5" fill="none" stroke="#67e8f9" stroke-width="1.2"/>
-              <circle cx="7" cy="-6.5" r="1.5" fill="#67e8f9" opacity="0.7"/>
-              <circle cx="7" cy="0.5"  r="1.5" fill="#67e8f9" opacity="0.7"/>
-              <circle cx="7" cy="7.5"  r="1.5" fill="#67e8f9" opacity="0.7"/>
-              <text y="46" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">worker-02</text>
+            <!-- ── ztunnel (mTLS gate) ── -->
+            <g class="k8s-gate" data-gate="ztunnel" transform="translate(440,130)">
+              <circle class="gate-ring" r="34" fill="none" stroke="#475569" stroke-width="1.5" opacity="0.35"/>
+              <circle r="26" fill="rgba(15,14,23,0.97)" stroke="#67e8f9" stroke-width="1.5" filter="url(#node-glow-f)"/>
+              <!-- padlock icon -->
+              <rect x="-8" y="-2" width="16" height="13" rx="2.5" fill="rgba(103,232,249,0.14)" stroke="#67e8f9" stroke-width="1.4"/>
+              <path d="M-5,-2 V-6 a5,5 0 0 1 10,0 V-2" fill="none" stroke="#67e8f9" stroke-width="1.4"/>
+              <circle cx="0" cy="4" r="1.6" fill="#67e8f9"/>
+              <text y="46" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">ztunnel</text>
+              <text y="59" text-anchor="middle" fill="#64748b" font-size="9" font-family="Inter,sans-serif">mTLS · L4</text>
+              <g class="gate-check" opacity="0" transform="translate(20,-20)">
+                <circle r="8" fill="#10b981"/>
+                <path d="M-3.5,0 L-1,3 L4,-3.5" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
             </g>
 
-            <!-- ── worker-03 ── -->
-            <g transform="translate(760,318)">
-              <circle r="38" fill="rgba(6,182,212,0.05)" stroke="rgba(6,182,212,0.12)" stroke-width="1"/>
-              <circle r="26" fill="rgba(15,14,23,0.97)" stroke="rgba(6,182,212,0.6)" stroke-width="1.5"/>
-              <rect x="-10" y="-9"  width="20" height="5" rx="1.5" fill="none" stroke="#67e8f9" stroke-width="1.2"/>
-              <rect x="-10" y="-2"  width="20" height="5" rx="1.5" fill="none" stroke="#67e8f9" stroke-width="1.2"/>
-              <rect x="-10" y="5"   width="20" height="5" rx="1.5" fill="none" stroke="#67e8f9" stroke-width="1.2"/>
-              <circle cx="7" cy="-6.5" r="1.5" fill="#67e8f9" opacity="0.7"/>
-              <circle cx="7" cy="0.5"  r="1.5" fill="#67e8f9" opacity="0.7"/>
-              <circle cx="7" cy="7.5"  r="1.5" fill="#67e8f9" opacity="0.7"/>
-              <text y="46" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">worker-03</text>
+            <!-- ── Kyverno (policy gate) ── -->
+            <g class="k8s-gate" data-gate="kyverno" transform="translate(625,130)">
+              <circle class="gate-ring" r="34" fill="none" stroke="#475569" stroke-width="1.5" opacity="0.35"/>
+              <circle r="26" fill="rgba(15,14,23,0.97)" stroke="#34d399" stroke-width="1.5" filter="url(#node-glow-f)"/>
+              <!-- policy / clipboard icon -->
+              <rect x="-8" y="-11" width="16" height="21" rx="2.5" fill="rgba(52,211,153,0.14)" stroke="#34d399" stroke-width="1.4"/>
+              <rect x="-4" y="-13" width="8" height="3.5" rx="1" fill="#34d399"/>
+              <path d="M-4.5,0 L-1.5,3 L4.5,-4" fill="none" stroke="#34d399" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <text y="46" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">Kyverno</text>
+              <text y="59" text-anchor="middle" fill="#64748b" font-size="9" font-family="Inter,sans-serif">policy</text>
+              <g class="gate-check" opacity="0" transform="translate(20,-20)">
+                <circle r="8" fill="#10b981"/>
+                <path d="M-3.5,0 L-1,3 L4,-3.5" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
+            </g>
+
+            <!-- ── pod ── -->
+            <g transform="translate(820,130)">
+              <text class="pod-status" y="-40" text-anchor="middle" fill="#34d399" font-size="11" font-weight="600" opacity="0" font-family="Inter,sans-serif">200 OK</text>
+              <circle r="32" fill="rgba(129,140,248,0.06)" stroke="rgba(129,140,248,0.16)" stroke-width="1"/>
+              <circle r="24" fill="rgba(15,14,23,0.97)" stroke="rgba(129,140,248,0.7)" stroke-width="1.5"/>
+              <!-- container/hexagon icon -->
+              <path d="M0,-11 L9.5,-5.5 V5.5 L0,11 L-9.5,5.5 V-5.5 Z" fill="rgba(129,140,248,0.16)" stroke="#818cf8" stroke-width="1.3"/>
+              <text y="44" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">pod</text>
             </g>
           </svg>
         </div>
@@ -370,6 +367,7 @@ const stats = [
       </div>
     </section>
 
+    {/* SLURM CLUSTER VIZ — hidden until the 3-node HPC cluster is finished; bring back by removing this comment wrapper
     <!-- ── SLURM CLUSTER VIZ ── -->
     <section id="slurm-section" class="py-24 bg-[#faf9f6] relative overflow-hidden">
       <div class="absolute inset-0 pointer-events-none">
@@ -385,7 +383,7 @@ const stats = [
         </div>
 
         <div class="reveal flex justify-center">
-          <svg id="slurm-svg" viewBox="0 0 800 360" class="w-full max-w-xl" aria-hidden="true">
+          <svg id="slurm-svg" viewBox="0 0 800 400" class="w-full max-w-xl" aria-hidden="true">
             <defs>
               <filter id="slurm-pkt-glow" x="-100%" y="-100%" width="300%" height="300%">
                 <feGaussianBlur stdDeviation="3" result="blur"/>
@@ -397,20 +395,27 @@ const stats = [
               </filter>
             </defs>
 
-            <!-- Edges -->
+            <!-- Dispatch edges: scheduler → compute nodes only -->
             <line x1="400" y1="88"  x2="185" y2="280" stroke="#f59e0b" stroke-width="1.2" opacity="0.3"/>
             <line x1="400" y1="88"  x2="615" y2="280" stroke="#f59e0b" stroke-width="1.2" opacity="0.3"/>
-            <line x1="185" y1="280" x2="615" y2="280" stroke="#fb923c" stroke-width="1"   opacity="0.22"/>
 
-            <!-- 6 packets (2 per edge, both directions) -->
-            <circle class="slurm-pkt" r="4"   fill="#fbbf24" filter="url(#slurm-pkt-glow)" opacity="0"/>
-            <circle class="slurm-pkt" r="4"   fill="#fbbf24" filter="url(#slurm-pkt-glow)" opacity="0"/>
-            <circle class="slurm-pkt" r="4"   fill="#fbbf24" filter="url(#slurm-pkt-glow)" opacity="0"/>
-            <circle class="slurm-pkt" r="4"   fill="#fbbf24" filter="url(#slurm-pkt-glow)" opacity="0"/>
-            <circle class="slurm-pkt" r="3.5" fill="#fb923c" filter="url(#slurm-pkt-glow)" opacity="0"/>
-            <circle class="slurm-pkt" r="3.5" fill="#fb923c" filter="url(#slurm-pkt-glow)" opacity="0"/>
+            <!-- Pending-job queue slots (decorative capacity markers either side of the scheduler) -->
+            <rect class="slurm-slot" x="48"  y="45" width="14" height="10" rx="2" fill="none" stroke="rgba(245,158,11,0.35)" stroke-width="1"/>
+            <rect class="slurm-slot" x="88"  y="45" width="14" height="10" rx="2" fill="none" stroke="rgba(245,158,11,0.35)" stroke-width="1"/>
+            <rect class="slurm-slot" x="128" y="45" width="14" height="10" rx="2" fill="none" stroke="rgba(245,158,11,0.35)" stroke-width="1"/>
+            <rect class="slurm-slot" x="658" y="45" width="14" height="10" rx="2" fill="none" stroke="rgba(245,158,11,0.35)" stroke-width="1"/>
+            <rect class="slurm-slot" x="698" y="45" width="14" height="10" rx="2" fill="none" stroke="rgba(245,158,11,0.35)" stroke-width="1"/>
+            <rect class="slurm-slot" x="738" y="45" width="14" height="10" rx="2" fill="none" stroke="rgba(245,158,11,0.35)" stroke-width="1"/>
 
-            <!-- ── Login / OOD node ── -->
+            <!-- 6 job cards: queue → scheduler → compute node → run → repeat -->
+            <rect class="slurm-job" width="10" height="7" rx="2" fill="#fbbf24" filter="url(#slurm-pkt-glow)" opacity="0"/>
+            <rect class="slurm-job" width="10" height="7" rx="2" fill="#fbbf24" filter="url(#slurm-pkt-glow)" opacity="0"/>
+            <rect class="slurm-job" width="10" height="7" rx="2" fill="#fbbf24" filter="url(#slurm-pkt-glow)" opacity="0"/>
+            <rect class="slurm-job" width="10" height="7" rx="2" fill="#fb923c" filter="url(#slurm-pkt-glow)" opacity="0"/>
+            <rect class="slurm-job" width="10" height="7" rx="2" fill="#fb923c" filter="url(#slurm-pkt-glow)" opacity="0"/>
+            <rect class="slurm-job" width="10" height="7" rx="2" fill="#fb923c" filter="url(#slurm-pkt-glow)" opacity="0"/>
+
+            <!-- ── Login / OOD node (scheduler) ── -->
             <g transform="translate(400,88)">
               <circle r="46" fill="rgba(245,158,11,0.08)"  stroke="rgba(245,158,11,0.18)" stroke-width="1"/>
               <circle r="30" fill="rgba(250,249,246,0.97)" stroke="rgba(245,158,11,0.75)" stroke-width="1.8" filter="url(#slurm-node-glow)"/>
@@ -422,6 +427,7 @@ const stats = [
               <line x1="-8" y1="-3" x2="8" y2="-3" stroke="#fbbf24" stroke-width="1" opacity="0.6"/>
               <line x1="-8" y1="0"  x2="5" y2="0"  stroke="#fbbf24" stroke-width="1" opacity="0.4"/>
               <text y="54" text-anchor="middle" fill="#78716c" font-size="12" font-family="Inter,sans-serif">login · OOD</text>
+              <text y="68" text-anchor="middle" fill="#a8a29e" font-size="10" font-family="Inter,sans-serif">scheduler</text>
             </g>
 
             <!-- ── compute-01 ── -->
@@ -438,6 +444,10 @@ const stats = [
               <line x1="10"  y1="0"  x2="14"  y2="0"  stroke="#fb923c" stroke-width="1.2"/>
               <line x1="10"  y1="5"  x2="14"  y2="5"  stroke="#fb923c" stroke-width="1.2"/>
               <text y="46" text-anchor="middle" fill="#78716c" font-size="12" font-family="Inter,sans-serif">compute-01</text>
+              <!-- Core occupancy cells -->
+              <rect class="slurm-core" data-node="0" data-slot="0" x="-27" y="53" width="14" height="10" rx="2" fill="#fbbf24" fill-opacity="0" stroke="rgba(245,158,11,0.4)" stroke-width="1"/>
+              <rect class="slurm-core" data-node="0" data-slot="1" x="-7"  y="53" width="14" height="10" rx="2" fill="#fbbf24" fill-opacity="0" stroke="rgba(245,158,11,0.4)" stroke-width="1"/>
+              <rect class="slurm-core" data-node="0" data-slot="2" x="13"  y="53" width="14" height="10" rx="2" fill="#fbbf24" fill-opacity="0" stroke="rgba(245,158,11,0.4)" stroke-width="1"/>
             </g>
 
             <!-- ── compute-02 ── -->
@@ -453,6 +463,10 @@ const stats = [
               <line x1="10"  y1="0"  x2="14"  y2="0"  stroke="#fb923c" stroke-width="1.2"/>
               <line x1="10"  y1="5"  x2="14"  y2="5"  stroke="#fb923c" stroke-width="1.2"/>
               <text y="46" text-anchor="middle" fill="#78716c" font-size="12" font-family="Inter,sans-serif">compute-02</text>
+              <!-- Core occupancy cells -->
+              <rect class="slurm-core" data-node="1" data-slot="0" x="-27" y="53" width="14" height="10" rx="2" fill="#fb923c" fill-opacity="0" stroke="rgba(251,146,60,0.4)" stroke-width="1"/>
+              <rect class="slurm-core" data-node="1" data-slot="1" x="-7"  y="53" width="14" height="10" rx="2" fill="#fb923c" fill-opacity="0" stroke="rgba(251,146,60,0.4)" stroke-width="1"/>
+              <rect class="slurm-core" data-node="1" data-slot="2" x="13"  y="53" width="14" height="10" rx="2" fill="#fb923c" fill-opacity="0" stroke="rgba(251,146,60,0.4)" stroke-width="1"/>
             </g>
           </svg>
         </div>
@@ -467,6 +481,7 @@ const stats = [
         </div>
       </div>
     </section>
+    */}
 
     <!-- ── JOURNEY ── -->
     <section id="journey" class="py-28 px-6 bg-slate-50">
@@ -786,47 +801,90 @@ const stats = [
         setTimeout(tick, 1800);
       }
 
-      // ── Slurm cluster animation ──
+      // ── Slurm cluster animation: job queue → scheduler → dispatch → run ──
+      // Hidden while the Slurm section is commented out above; #slurm-svg won't exist so
+      // this safely no-ops, but it's commented out too to avoid confusion. Bring it back
+      // together with the section markup once the HPC cluster work is finished.
+      /*
       (function () {
         const svg = document.getElementById('slurm-svg');
         if (!svg) return;
 
-        const nodes = [
-          { x: 400, y: 88  },  // login/OOD
+        const login = { x: 400, y: 88 };
+        const nodePos = [
           { x: 185, y: 280 },  // compute-01
           { x: 615, y: 280 },  // compute-02
         ];
-
-        const edgeDirs = [
-          [0,1],[1,0],
-          [0,2],[2,0],
-          [1,2],[2,1],
+        const queueSlots = [
+          [{ x: 55, y: 50 }, { x: 95, y: 50 },  { x: 135, y: 50 }], // queue feeding compute-01
+          [{ x: 665, y: 50 },{ x: 705, y: 50 }, { x: 745, y: 50 }], // queue feeding compute-02
         ];
 
-        const state = edgeDirs.map(([from, to]) => ({
-          from, to,
-          t: Math.random(),
-          speed: 0.003 + Math.random() * 0.003,
-        }));
+        // Phase boundaries as fractions of a job's own cycle
+        const P_TRAVEL1_END = 0.34; // queue → scheduler
+        const P_TRAVEL2_END = 0.50; // scheduler → node
+        const P_QUEUED_END  = 0.18; // queued, sitting at slot
 
-        const pktEls = Array.from(svg.querySelectorAll('.slurm-pkt')) as SVGCircleElement[];
+        const jobs = Array.from({ length: 6 }, (_, i) => {
+          const node = i < 3 ? 0 : 1;
+          const slot = i % 3;
+          const duration = 7000 + Math.random() * 3000;
+          return { node, slot, duration, offset: Math.random() * duration };
+        });
 
-        function frame() {
-          state.forEach((p, i) => {
-            p.t += p.speed;
-            if (p.t > 1) p.t -= 1;
-            const a = nodes[p.from], b = nodes[p.to];
-            pktEls[i]?.setAttribute('cx', (a.x + (b.x - a.x) * p.t).toFixed(1));
-            pktEls[i]?.setAttribute('cy', (a.y + (b.y - a.y) * p.t).toFixed(1));
-            pktEls[i]?.setAttribute('opacity', '0.88');
+        const jobEls  = Array.from(svg.querySelectorAll('.slurm-job')) as SVGRectElement[];
+        const coreEls = Array.from(svg.querySelectorAll('.slurm-core')) as SVGRectElement[];
+        const coreByNodeSlot = new Map<string, SVGRectElement>();
+        coreEls.forEach(el => {
+          coreByNodeSlot.set(`${el.dataset.node}:${el.dataset.slot}`, el);
+        });
+
+        function lerp(a: {x:number,y:number}, b: {x:number,y:number}, u: number) {
+          return { x: a.x + (b.x - a.x) * u, y: a.y + (b.y - a.y) * u };
+        }
+
+        const start = performance.now();
+
+        function frame(now: number) {
+          jobs.forEach((job, i) => {
+            const p = (((now - start) + job.offset) % job.duration) / job.duration;
+            const slotPos = queueSlots[job.node][job.slot];
+            const nPos = nodePos[job.node];
+            const jobEl = jobEls[i];
+            const coreEl = coreByNodeSlot.get(`${job.node}:${job.slot}`);
+
+            let pos = slotPos;
+            let visible = true;
+
+            if (p < P_QUEUED_END) {
+              pos = slotPos;
+            } else if (p < P_TRAVEL1_END) {
+              const u = (p - P_QUEUED_END) / (P_TRAVEL1_END - P_QUEUED_END);
+              pos = lerp(slotPos, login, u);
+            } else if (p < P_TRAVEL2_END) {
+              const u = (p - P_TRAVEL1_END) / (P_TRAVEL2_END - P_TRAVEL1_END);
+              pos = lerp(login, nPos, u);
+            } else {
+              visible = false; // running on the node — represented by the core cell instead
+            }
+
+            if (jobEl) {
+              jobEl.setAttribute('x', (pos.x - 5).toFixed(1));
+              jobEl.setAttribute('y', (pos.y - 3.5).toFixed(1));
+              jobEl.setAttribute('opacity', visible ? '0.92' : '0');
+            }
+            if (coreEl) {
+              coreEl.setAttribute('fill-opacity', visible ? '0' : '0.85');
+            }
           });
           requestAnimationFrame(frame);
         }
 
         new IntersectionObserver((entries, obs) => {
-          if (entries[0].isIntersecting) { frame(); obs.disconnect(); }
+          if (entries[0].isIntersecting) { requestAnimationFrame(frame); obs.disconnect(); }
         }, { threshold: 0.2 }).observe(document.getElementById('slurm-section')!);
       })();
+      */
 
       // ── Sticky nav ──
       const nav = document.getElementById('site-nav') as HTMLElement;
@@ -841,7 +899,7 @@ const stats = [
       }, { passive: true });
 
       // Active section highlight
-      const sectionIds = ['about', 'cluster-section', 'slurm-section', 'journey', 'projects', 'homelab', 'cv', 'contact'];
+      const sectionIds = ['about', 'cluster-section', 'journey', 'projects', 'homelab', 'cv', 'contact']; // 'slurm-section' omitted while that section is hidden
       const sectionEls = sectionIds.map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[];
 
       const navObserver = new IntersectionObserver(entries => {
@@ -870,48 +928,84 @@ const stats = [
         requestAnimationFrame(lerpGlow);
       })();
 
-      // ── Kubernetes cluster animation ──
+      // ── Kubernetes animation: request journey through Authentik → ztunnel → Kyverno → pod ──
       (function () {
         const svg = document.getElementById('cluster-svg');
         if (!svg) return;
 
-        const nodes = [
-          { x: 450, y: 100 },  // control-plane
-          { x: 140, y: 318 },  // worker-01
-          { x: 450, y: 372 },  // worker-02
-          { x: 760, y: 318 },  // worker-03
-        ];
+        const X_CLIENT = 70, X_AUTH = 255, X_ZTUNNEL = 440, X_KYVERNO = 625, X_POD = 820;
+        const Y = 130;
+        const SPAN = X_POD - X_CLIENT;
 
-        // 12 directed edges (2 per undirected edge, both directions)
-        const edgeDirs = [
-          [0,1],[1,0],
-          [0,2],[2,0],
-          [0,3],[3,0],
-          [1,2],[2,1],
-          [2,3],[3,2],
-          [1,3],[3,1],
-        ];
+        // Cycle phases, as fractions of the total loop duration T
+        const T = 7000;
+        const P_FWD_END    = 0.42; // client → pod (through all 3 gates)
+        const P_POD_END    = 0.47; // brief "200 OK" dwell at the pod
+        const P_BACK_END   = 0.89; // pod → client (ztunnel only — auth/policy don't re-check responses)
+        // P_BACK_END → 1.0     : brief dwell at the client before the next request
 
-        const state = edgeDirs.map(([from, to]) => ({
-          from, to,
-          t: Math.random(),
-          speed: 0.0022 + Math.random() * 0.0028,
+        const frac = (x: number) => (x - X_CLIENT) / SPAN;
+        const T_AUTH    = frac(X_AUTH)    * P_FWD_END;
+        const T_ZTUNNEL = frac(X_ZTUNNEL) * P_FWD_END;
+        const T_KYVERNO = frac(X_KYVERNO) * P_FWD_END;
+        const T_ZTUNNEL_BACK = P_POD_END + (1 - frac(X_ZTUNNEL)) * (P_BACK_END - P_POD_END);
+
+        const token = document.getElementById('k8s-token');
+        const podStatus = svg.querySelector('.pod-status');
+        const clientRing = svg.querySelector('.client-ring');
+        const gates = Array.from(svg.querySelectorAll('.k8s-gate')).map(g => ({
+          name: g.getAttribute('data-gate'),
+          ring: g.querySelector('.gate-ring') as SVGCircleElement,
+          check: g.querySelector('.gate-check') as SVGGElement,
         }));
 
-        const pktEls = Array.from(
-          svg.querySelectorAll('.k8s-pkt')
-        ) as SVGCircleElement[];
+        function setGate(gate: typeof gates[number], active: boolean, pulse = false) {
+          if (gate.ring) {
+            gate.ring.setAttribute('stroke', active ? '#10b981' : '#475569');
+            gate.ring.setAttribute('opacity', pulse ? '1' : active ? '0.85' : '0.35');
+            gate.ring.setAttribute('stroke-width', pulse ? '2.5' : '1.5');
+          }
+          if (gate.check) gate.check.setAttribute('opacity', active ? '1' : '0');
+        }
 
-        function frame() {
-          state.forEach((p, i) => {
-            p.t += p.speed;
-            if (p.t > 1) p.t -= 1;
-            const a = nodes[p.from];
-            const b = nodes[p.to];
-            pktEls[i]?.setAttribute('cx', (a.x + (b.x - a.x) * p.t).toFixed(1));
-            pktEls[i]?.setAttribute('cy', (a.y + (b.y - a.y) * p.t).toFixed(1));
-            pktEls[i]?.setAttribute('opacity', '0.88');
+        const start = performance.now();
+
+        function frame(now: number) {
+          const t = ((now - start) % T) / T;
+
+          let x = X_CLIENT, visible = true, forward = true;
+          if (t < P_FWD_END) {
+            x = X_CLIENT + SPAN * (t / P_FWD_END);
+            forward = true;
+          } else if (t < P_POD_END) {
+            visible = false; // arriving — pod flashes its own status instead
+          } else if (t < P_BACK_END) {
+            const u = (t - P_POD_END) / (P_BACK_END - P_POD_END);
+            x = X_POD - SPAN * u;
+            forward = false;
+          } else {
+            visible = false; // delivered — brief pause before the next request
+          }
+
+          if (token) {
+            token.setAttribute('transform', `translate(${x.toFixed(1)} ${Y}) rotate(${forward ? 0 : 180})`);
+            token.setAttribute('fill', forward ? '#818cf8' : '#67e8f9');
+            token.setAttribute('opacity', visible ? '0.95' : '0');
+          }
+
+          gates.forEach(gate => {
+            if (gate.name === 'authentik') setGate(gate, t >= T_AUTH);
+            else if (gate.name === 'kyverno') setGate(gate, t >= T_KYVERNO);
+            else if (gate.name === 'ztunnel') {
+              const active = t >= T_ZTUNNEL;
+              const pulse = Math.abs(t - T_ZTUNNEL_BACK) < 0.02;
+              setGate(gate, active, pulse);
+            }
           });
+
+          if (podStatus) podStatus.setAttribute('opacity', (t >= P_FWD_END && t < 0.55) ? '1' : '0');
+          if (clientRing) clientRing.setAttribute('opacity', t >= P_BACK_END ? '0.8' : '0');
+
           requestAnimationFrame(frame);
         }
 
@@ -919,7 +1013,7 @@ const stats = [
         if (section) {
           new IntersectionObserver((entries, obs) => {
             if (entries[0].isIntersecting) {
-              frame();
+              requestAnimationFrame(frame);
               obs.disconnect();
             }
           }, { threshold: 0.2 }).observe(section);
