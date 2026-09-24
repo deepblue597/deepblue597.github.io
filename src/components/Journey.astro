@@ -1,0 +1,109 @@
+---
+import SectionHeader from './SectionHeader.astro';
+import Logo from './Logo.astro';
+import { timeline } from '../data/site';
+
+// Newest first, resume-style
+const entries = [...timeline].reverse();
+---
+
+<section id="journey" class="pt-24 md:pt-32" aria-labelledby="journey-title">
+  <SectionHeader id="journey-title" eyebrow="Experience" title="The journey so far" />
+
+  <div id="journey-list" class="relative mx-auto max-w-5xl">
+    <!-- Scroll-tracked rail: fills as you read, with the monogram riding along -->
+    <div
+      class="journey-rail pointer-events-none absolute bottom-0 top-0 w-2 -translate-x-1/2 rounded-full bg-surface-2 shadow-[inset_0_2px_1.5px_rgb(165_174_184/0.32)]"
+      aria-hidden="true"
+    >
+      <div id="journey-fill" class="absolute inset-0 origin-top rounded-full bg-gradient-to-b from-indigo-400 via-indigo-300/70 to-cyan-300/0" style="transform: scaleY(0)"></div>
+      <div id="journey-marker" class="absolute -left-[14px] top-0 will-change-transform">
+        <div class="drama-shadow grid h-9 w-9 place-items-center rounded-full border-2 border-canvas bg-canvas">
+          <Logo size={30} class="rounded-full" />
+        </div>
+      </div>
+    </div>
+
+    <ol class="divide-y divide-line">
+      {entries.map((item, i) => (
+        <li class="journey-row reveal grid py-10 first:pt-0 last:pb-0" style={`transition-delay: ${i * 80}ms`}>
+          <!-- Left column (desktop): org + dates -->
+          <div class="hidden md:block">
+            <h3 class="text-lg font-semibold tracking-tight text-ink">{item.org}</h3>
+            <p class="mt-1 text-sm text-ink-2">{item.year}</p>
+          </div>
+
+          <div aria-hidden="true"></div>
+
+          <div>
+            <div class="mb-3 md:hidden">
+              <h3 class="text-lg font-semibold tracking-tight text-ink">{item.org}</h3>
+              <p class="text-xs text-ink-2">{item.year}</p>
+            </div>
+            <p class="text-xs font-semibold uppercase tracking-widest text-accent md:hidden">{item.role}</p>
+            <h4 class="hidden text-xl font-medium tracking-tight text-ink md:block">{item.role}</h4>
+            <p class="mt-3 leading-7 text-ink-2">{item.description}</p>
+            <ul class="mt-4 flex flex-wrap gap-1.5" aria-label="Technologies">
+              {item.tags.map((t) => (
+                <li class="rounded-full border border-line px-2.5 py-0.5 text-xs text-ink-2">{t}</li>
+              ))}
+            </ul>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  /* Mobile: rail on the left, content to its right.
+     Desktop: org/dates | rail | role + details (like a resume). */
+  .journey-row {
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    column-gap: 1rem;
+  }
+  .journey-row > :first-child {
+    display: none;
+  }
+  .journey-rail {
+    left: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .journey-row {
+      grid-template-columns: minmax(0, 15rem) 3rem minmax(0, 1fr);
+      column-gap: 2rem;
+    }
+    .journey-row > :first-child {
+      display: block;
+    }
+    .journey-rail {
+      /* first col + gap + half of rail col */
+      left: calc(min(15rem, 100%) + 2rem + 1.5rem);
+    }
+  }
+</style>
+
+<script>
+  const list = document.getElementById('journey-list');
+  const fill = document.getElementById('journey-fill');
+  const marker = document.getElementById('journey-marker');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (list && fill && marker) {
+    let queued = false;
+    const update = () => {
+      queued = false;
+      const r = list.getBoundingClientRect();
+      const anchor = window.innerHeight * 0.55; // reading line, a bit below centre
+      const p = reduce ? 1 : Math.min(Math.max((anchor - r.top) / r.height, 0), 1);
+      fill.style.transform = `scaleY(${p})`;
+      marker.style.transform = `translateY(${Math.max(p * r.height - 18, 0)}px)`;
+    };
+    const onScroll = () => {
+      if (!queued) { queued = true; requestAnimationFrame(update); }
+    };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+  }
+</script>

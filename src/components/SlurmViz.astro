@@ -1,0 +1,211 @@
+---
+// HIDDEN — the 3-node Slurm/HPC section is not finished yet.
+// This component is intentionally NOT imported by src/pages/index.astro.
+// To bring it back: uncomment the import + <SlurmViz /> in index.astro and the
+// HPC entry in `navLinks` (src/data/site.ts).
+//
+// Markup and animation are carried over unchanged from the previous page. The
+// panel keeps its warm light background in both themes (the SVG uses
+// hard-coded light fills); revisit for dark mode when re-enabling.
+import SectionHeader from './SectionHeader.astro';
+import { slurmTags } from '../data/site';
+---
+
+<!-- ── SLURM CLUSTER VIZ ── -->
+<section id="slurm-section" class="pt-24 md:pt-32" aria-labelledby="slurm-title">
+  <SectionHeader
+    id="slurm-title"
+    eyebrow="HPC"
+    title="Slurm cluster"
+    subtitle={'3-node cluster at NCSR "Demokritos" — Open OnDemand exposes Jupyter, VSCode & RStudio as Apptainer apps'}
+  />
+
+  <div class="reveal rounded-3xl border border-line bg-canvas p-2">
+    <div class="relative overflow-hidden rounded-2xl bg-[#faf9f6] ring-1 ring-black/5">
+      <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div class="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-100 opacity-60 blur-[140px]"></div>
+      </div>
+      <div class="relative px-3 py-10 sm:px-8 md:py-14">
+        <div class="flex justify-center">
+          <svg id="slurm-svg" viewBox="0 0 800 400" class="w-full max-w-xl" aria-hidden="true">
+            <defs>
+              <filter id="slurm-pkt-glow" x="-100%" y="-100%" width="300%" height="300%">
+                <feGaussianBlur stdDeviation="3" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <filter id="slurm-node-glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="8" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+
+            <!-- Dispatch edges: scheduler → compute nodes only -->
+            <line x1="400" y1="88"  x2="185" y2="280" stroke="#f59e0b" stroke-width="1.2" opacity="0.3"/>
+            <line x1="400" y1="88"  x2="615" y2="280" stroke="#f59e0b" stroke-width="1.2" opacity="0.3"/>
+
+            <!-- Pending-job queue slots (decorative capacity markers either side of the scheduler) -->
+            <rect class="slurm-slot" x="48"  y="45" width="14" height="10" rx="2" fill="none" stroke="rgba(245,158,11,0.35)" stroke-width="1"/>
+            <rect class="slurm-slot" x="88"  y="45" width="14" height="10" rx="2" fill="none" stroke="rgba(245,158,11,0.35)" stroke-width="1"/>
+            <rect class="slurm-slot" x="128" y="45" width="14" height="10" rx="2" fill="none" stroke="rgba(245,158,11,0.35)" stroke-width="1"/>
+            <rect class="slurm-slot" x="658" y="45" width="14" height="10" rx="2" fill="none" stroke="rgba(245,158,11,0.35)" stroke-width="1"/>
+            <rect class="slurm-slot" x="698" y="45" width="14" height="10" rx="2" fill="none" stroke="rgba(245,158,11,0.35)" stroke-width="1"/>
+            <rect class="slurm-slot" x="738" y="45" width="14" height="10" rx="2" fill="none" stroke="rgba(245,158,11,0.35)" stroke-width="1"/>
+
+            <!-- 6 job cards: queue → scheduler → compute node → run → repeat -->
+            <rect class="slurm-job" width="10" height="7" rx="2" fill="#fbbf24" filter="url(#slurm-pkt-glow)" opacity="0"/>
+            <rect class="slurm-job" width="10" height="7" rx="2" fill="#fbbf24" filter="url(#slurm-pkt-glow)" opacity="0"/>
+            <rect class="slurm-job" width="10" height="7" rx="2" fill="#fbbf24" filter="url(#slurm-pkt-glow)" opacity="0"/>
+            <rect class="slurm-job" width="10" height="7" rx="2" fill="#fb923c" filter="url(#slurm-pkt-glow)" opacity="0"/>
+            <rect class="slurm-job" width="10" height="7" rx="2" fill="#fb923c" filter="url(#slurm-pkt-glow)" opacity="0"/>
+            <rect class="slurm-job" width="10" height="7" rx="2" fill="#fb923c" filter="url(#slurm-pkt-glow)" opacity="0"/>
+
+            <!-- ── Login / OOD node (scheduler) ── -->
+            <g transform="translate(400,88)">
+              <circle r="46" fill="rgba(245,158,11,0.08)"  stroke="rgba(245,158,11,0.18)" stroke-width="1"/>
+              <circle r="30" fill="rgba(250,249,246,0.97)" stroke="rgba(245,158,11,0.75)" stroke-width="1.8" filter="url(#slurm-node-glow)"/>
+              <!-- Screen icon -->
+              <rect x="-12" y="-10" width="24" height="16" rx="2.5" fill="none" stroke="#f59e0b" stroke-width="1.4"/>
+              <line x1="-4"  y1="6"  x2="4"  y2="6"  stroke="#f59e0b" stroke-width="1.2"/>
+              <line x1="-7"  y1="9"  x2="7"  y2="9"  stroke="#f59e0b" stroke-width="1.2"/>
+              <!-- Scan line inside screen -->
+              <line x1="-8" y1="-3" x2="8" y2="-3" stroke="#fbbf24" stroke-width="1" opacity="0.6"/>
+              <line x1="-8" y1="0"  x2="5" y2="0"  stroke="#fbbf24" stroke-width="1" opacity="0.4"/>
+              <text y="54" text-anchor="middle" fill="#78716c" font-size="12" font-family="Inter,sans-serif">login · OOD</text>
+              <text y="68" text-anchor="middle" fill="#a8a29e" font-size="10" font-family="Inter,sans-serif">scheduler</text>
+            </g>
+
+            <!-- ── compute-01 ── -->
+            <g transform="translate(185,280)">
+              <circle r="38" fill="rgba(251,146,60,0.06)" stroke="rgba(251,146,60,0.16)" stroke-width="1"/>
+              <circle r="26" fill="rgba(250,249,246,0.97)" stroke="rgba(251,146,60,0.65)" stroke-width="1.5"/>
+              <!-- Chip icon -->
+              <rect x="-10" y="-10" width="20" height="20" rx="2.5" fill="none" stroke="#fb923c" stroke-width="1.4"/>
+              <rect x="-5.5" y="-5.5" width="11" height="11" rx="1.5" fill="#fb923c" opacity="0.25"/>
+              <line x1="-14" y1="-5" x2="-10" y2="-5" stroke="#fb923c" stroke-width="1.2"/>
+              <line x1="-14" y1="0"  x2="-10" y2="0"  stroke="#fb923c" stroke-width="1.2"/>
+              <line x1="-14" y1="5"  x2="-10" y2="5"  stroke="#fb923c" stroke-width="1.2"/>
+              <line x1="10"  y1="-5" x2="14"  y2="-5" stroke="#fb923c" stroke-width="1.2"/>
+              <line x1="10"  y1="0"  x2="14"  y2="0"  stroke="#fb923c" stroke-width="1.2"/>
+              <line x1="10"  y1="5"  x2="14"  y2="5"  stroke="#fb923c" stroke-width="1.2"/>
+              <text y="46" text-anchor="middle" fill="#78716c" font-size="12" font-family="Inter,sans-serif">compute-01</text>
+              <!-- Core occupancy cells -->
+              <rect class="slurm-core" data-node="0" data-slot="0" x="-27" y="53" width="14" height="10" rx="2" fill="#fbbf24" fill-opacity="0" stroke="rgba(245,158,11,0.4)" stroke-width="1"/>
+              <rect class="slurm-core" data-node="0" data-slot="1" x="-7"  y="53" width="14" height="10" rx="2" fill="#fbbf24" fill-opacity="0" stroke="rgba(245,158,11,0.4)" stroke-width="1"/>
+              <rect class="slurm-core" data-node="0" data-slot="2" x="13"  y="53" width="14" height="10" rx="2" fill="#fbbf24" fill-opacity="0" stroke="rgba(245,158,11,0.4)" stroke-width="1"/>
+            </g>
+
+            <!-- ── compute-02 ── -->
+            <g transform="translate(615,280)">
+              <circle r="38" fill="rgba(251,146,60,0.06)" stroke="rgba(251,146,60,0.16)" stroke-width="1"/>
+              <circle r="26" fill="rgba(250,249,246,0.97)" stroke="rgba(251,146,60,0.65)" stroke-width="1.5"/>
+              <rect x="-10" y="-10" width="20" height="20" rx="2.5" fill="none" stroke="#fb923c" stroke-width="1.4"/>
+              <rect x="-5.5" y="-5.5" width="11" height="11" rx="1.5" fill="#fb923c" opacity="0.25"/>
+              <line x1="-14" y1="-5" x2="-10" y2="-5" stroke="#fb923c" stroke-width="1.2"/>
+              <line x1="-14" y1="0"  x2="-10" y2="0"  stroke="#fb923c" stroke-width="1.2"/>
+              <line x1="-14" y1="5"  x2="-10" y2="5"  stroke="#fb923c" stroke-width="1.2"/>
+              <line x1="10"  y1="-5" x2="14"  y2="-5" stroke="#fb923c" stroke-width="1.2"/>
+              <line x1="10"  y1="0"  x2="14"  y2="0"  stroke="#fb923c" stroke-width="1.2"/>
+              <line x1="10"  y1="5"  x2="14"  y2="5"  stroke="#fb923c" stroke-width="1.2"/>
+              <text y="46" text-anchor="middle" fill="#78716c" font-size="12" font-family="Inter,sans-serif">compute-02</text>
+              <!-- Core occupancy cells -->
+              <rect class="slurm-core" data-node="1" data-slot="0" x="-27" y="53" width="14" height="10" rx="2" fill="#fb923c" fill-opacity="0" stroke="rgba(251,146,60,0.4)" stroke-width="1"/>
+              <rect class="slurm-core" data-node="1" data-slot="1" x="-7"  y="53" width="14" height="10" rx="2" fill="#fb923c" fill-opacity="0" stroke="rgba(251,146,60,0.4)" stroke-width="1"/>
+              <rect class="slurm-core" data-node="1" data-slot="2" x="13"  y="53" width="14" height="10" rx="2" fill="#fb923c" fill-opacity="0" stroke="rgba(251,146,60,0.4)" stroke-width="1"/>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Tech tags -->
+        <ul class="mt-10 flex flex-wrap justify-center gap-2">
+          {slurmTags.map((t) => (
+            <li class="cursor-default rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 text-xs font-medium text-amber-800 transition-colors duration-200 hover:bg-amber-100">
+              {t}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // ── Slurm cluster animation: job queue → scheduler → dispatch → run ──
+  (function () {
+    const svg = document.getElementById('slurm-svg');
+    if (!svg) return;
+
+    const login = { x: 400, y: 88 };
+    const nodePos = [
+      { x: 185, y: 280 },  // compute-01
+      { x: 615, y: 280 },  // compute-02
+    ];
+    const queueSlots = [
+      [{ x: 55, y: 50 }, { x: 95, y: 50 },  { x: 135, y: 50 }], // queue feeding compute-01
+      [{ x: 665, y: 50 },{ x: 705, y: 50 }, { x: 745, y: 50 }], // queue feeding compute-02
+    ];
+
+    // Phase boundaries as fractions of a job's own cycle
+    const P_TRAVEL1_END = 0.34; // queue → scheduler
+    const P_TRAVEL2_END = 0.50; // scheduler → node
+    const P_QUEUED_END  = 0.18; // queued, sitting at slot
+
+    const jobs = Array.from({ length: 6 }, (_, i) => {
+      const node = i < 3 ? 0 : 1;
+      const slot = i % 3;
+      const duration = 7000 + Math.random() * 3000;
+      return { node, slot, duration, offset: Math.random() * duration };
+    });
+
+    const jobEls  = Array.from(svg.querySelectorAll('.slurm-job')) as SVGRectElement[];
+    const coreEls = Array.from(svg.querySelectorAll('.slurm-core')) as SVGRectElement[];
+    const coreByNodeSlot = new Map<string, SVGRectElement>();
+    coreEls.forEach(el => {
+      coreByNodeSlot.set(`${el.dataset.node}:${el.dataset.slot}`, el);
+    });
+
+    function lerp(a: {x:number,y:number}, b: {x:number,y:number}, u: number) {
+      return { x: a.x + (b.x - a.x) * u, y: a.y + (b.y - a.y) * u };
+    }
+
+    const start = performance.now();
+
+    function frame(now: number) {
+      jobs.forEach((job, i) => {
+        const p = (((now - start) + job.offset) % job.duration) / job.duration;
+        const slotPos = queueSlots[job.node][job.slot];
+        const nPos = nodePos[job.node];
+        const jobEl = jobEls[i];
+        const coreEl = coreByNodeSlot.get(`${job.node}:${job.slot}`);
+
+        let pos = slotPos;
+        let visible = true;
+
+        if (p < P_QUEUED_END) {
+          pos = slotPos;
+        } else if (p < P_TRAVEL1_END) {
+          const u = (p - P_QUEUED_END) / (P_TRAVEL1_END - P_QUEUED_END);
+          pos = lerp(slotPos, login, u);
+        } else if (p < P_TRAVEL2_END) {
+          const u = (p - P_TRAVEL1_END) / (P_TRAVEL2_END - P_TRAVEL1_END);
+          pos = lerp(login, nPos, u);
+        } else {
+          visible = false; // running on the node — represented by the core cell instead
+        }
+
+        if (jobEl) {
+          jobEl.setAttribute('x', (pos.x - 5).toFixed(1));
+          jobEl.setAttribute('y', (pos.y - 3.5).toFixed(1));
+          jobEl.setAttribute('opacity', visible ? '0.92' : '0');
+        }
+        if (coreEl) {
+          coreEl.setAttribute('fill-opacity', visible ? '0' : '0.85');
+        }
+      });
+      requestAnimationFrame(frame);
+    }
+
+    new IntersectionObserver((entries, obs) => {
+      if (entries[0].isIntersecting) { requestAnimationFrame(frame); obs.disconnect(); }
+    }, { threshold: 0.2 }).observe(document.getElementById('slurm-section')!);
+  })();
+</script>

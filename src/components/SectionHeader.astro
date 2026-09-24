@@ -1,0 +1,18 @@
+---
+// Eyebrow + heading + optional subtitle, centred. Used by every section.
+interface Props {
+  eyebrow: string;
+  title: string;
+  subtitle?: string;
+  id?: string;
+}
+const { eyebrow, title, subtitle, id } = Astro.props;
+---
+
+<div class="reveal mb-10 space-y-4 text-center md:mb-14">
+  <p class="text-xs font-semibold uppercase tracking-widest text-accent">{eyebrow}</p>
+  <h2 id={id} class="mx-auto max-w-xl text-balance text-3xl font-medium leading-tight tracking-tight text-ink md:text-4xl">
+    {title}
+  </h2>
+  {subtitle && <p class="mx-auto max-w-md text-balance text-sm leading-6 text-ink-2">{subtitle}</p>}
+</div>

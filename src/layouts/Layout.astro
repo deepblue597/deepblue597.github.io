@@ -1,0 +1,128 @@
+---
+import '../styles/global.css';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = site.title, description = site.description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://deepblue597.org');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="theme-color" content="#f7f7f8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#161e30" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Apply theme + JS flag before first paint (no flash of wrong theme) -->
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        var stored = null;
+        try { stored = localStorage.getItem('theme'); } catch (e) {}
+        if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          d.classList.add('dark');
+        }
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-canvas"
+    >
+      Skip to content
+    </a>
+
+    <!-- Framed column: border-x, hatched rails on large screens -->
+    <div class="mx-auto flex min-h-screen max-w-[87rem] flex-col overflow-x-clip border-line/60 md:border-x">
+      <Navbar />
+      <div class="grid flex-1 grid-cols-1 lg:grid-cols-[64px_minmax(0,1fr)_64px]">
+        <div class="hatched hidden border-r border-line lg:block" aria-hidden="true"></div>
+
+        <div class="relative min-w-0 px-4 sm:px-6">
+          <div
+            class="bg-glow pointer-events-none absolute left-1/2 top-0 -z-10 h-full w-full max-w-[840px] -translate-x-1/2 blur-3xl"
+            aria-hidden="true"
+          ></div>
+          <main id="main">
+            <slot />
+          </main>
+          <Footer />
+        </div>
+
+        <div class="hatched hidden border-l border-line lg:block" aria-hidden="true"></div>
+      </div>
+      <div class="hatched h-8 w-full border-t border-line" aria-hidden="true"></div>
+    </div>
+
+    <!-- Back to top -->
+    <a
+      id="back-to-top"
+      href="#top"
+      aria-label="Back to top"
+      class="drama-shadow pointer-events-none fixed bottom-5 right-5 z-40 grid h-10 w-10 translate-y-3 place-items-center rounded-full border border-line bg-surface text-ink-2 opacity-0 transition-all duration-300 hover:text-ink"
+    >
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 19V5M5 12l7-7 7 7" />
+      </svg>
+    </a>
+
+    <script>
+      // Scroll reveal (fallback: everything visible when IO is unsupported)
+      const reveals = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => entries.forEach((e) => {
+            if (e.isIntersecting) {
+              const el = e.target as HTMLElement;
+              el.classList.add('visible');
+              io.unobserve(el);
+              // Clear stagger delays once revealed so hover effects respond instantly
+              if (el.style.transitionDelay) setTimeout(() => (el.style.transitionDelay = '0s'), 1200);
+            }
+          }),
+          { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+        );
+        reveals.forEach((el) => io.observe(el));
+      } else {
+        reveals.forEach((el) => el.classList.add('visible'));
+      }
+
+      // Back-to-top button
+      const toTop = document.getElementById('back-to-top');
+      if (toTop) {
+        const update = () => {
+          const show = window.scrollY > 800;
+          toTop.classList.toggle('opacity-0', !show);
+          toTop.classList.toggle('translate-y-3', !show);
+          toTop.classList.toggle('pointer-events-none', !show);
+          toTop.setAttribute('tabindex', show ? '0' : '-1');
+        };
+        update();
+        window.addEventListener('scroll', update, { passive: true });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,39 @@
+---
+// Rounded, bordered card. Brightens to the surface colour on hover and shows a
+// soft indigo corner wash. With `href` the whole card becomes a link and an
+// arrow badge pops up in the corner on hover.
+interface Props {
+  href?: string;
+  class?: string;
+  label?: string;
+  style?: string;
+}
+const { href, class: className = '', label, style } = Astro.props;
+const external = href ? /^https?:/.test(href) : false;
+const base = 'bento group flex flex-col rounded-2xl border border-line bg-canvas p-6';
+---
+
+{href ? (
+  <a
+    href={href}
+    aria-label={label}
+    class:list={[base, 'hover:border-accent/40', className]}
+    style={style}
+    target={external ? '_blank' : undefined}
+    rel={external ? 'noopener noreferrer' : undefined}
+  >
+    <span
+      class="absolute bottom-4 right-4 z-10 grid h-9 w-9 rotate-6 place-items-center rounded-full bg-accent-soft text-accent opacity-0 transition-all duration-300 group-hover:-translate-y-2 group-hover:rotate-0 group-hover:opacity-100 group-focus-visible:-translate-y-2 group-focus-visible:rotate-0 group-focus-visible:opacity-100"
+      aria-hidden="true"
+    >
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17.25 15.25V6.75H8.75M17 7 6.75 17.25" />
+      </svg>
+    </span>
+    <slot />
+  </a>
+) : (
+  <div class:list={[base, className]} style={style}>
+    <slot />
+  </div>
+)}

@@ -1,0 +1,123 @@
+---
+import BentoCard from './BentoCard.astro';
+import SectionHeader from './SectionHeader.astro';
+import { skills, stats } from '../data/site';
+---
+
+<section id="about" class="pt-24 md:pt-32" aria-labelledby="about-title">
+  <SectionHeader id="about-title" eyebrow="About" title="Infrastructure engineer with a builder's mindset" />
+
+  <div class="grid grid-cols-1 gap-2 md:grid-cols-12">
+    <!-- Bio -->
+    <BentoCard class="reveal md:col-span-7 md:row-span-2">
+      <h3 class="mb-4 text-base font-medium text-ink">A bit about me</h3>
+      <div class="space-y-4 leading-7 text-ink-2">
+        <p>
+          I'm a Software Engineer at IIT, NCSR "Demokritos", working on Pharos — the Greek AI Factory, an EU-funded initiative bringing national AI computing infrastructure to researchers across Greece.
+        </p>
+        <p>
+          My work spans HPC cluster administration (Slurm, Open OnDemand, Ansible), MLOps platform engineering, and a self-hosted homelab running 20+ services behind Traefik. I hold an M.Eng from AUTh with a thesis on a declarative DSL for streaming ML pipelines.
+        </p>
+        <p>
+          Mensa member. Fluent in Greek, English, Italian, and German.
+        </p>
+      </div>
+    </BentoCard>
+
+    <!-- Stats -->
+    <BentoCard class="reveal md:col-span-5" style="transition-delay: 80ms">
+      <h3 class="text-base font-medium text-ink">By the numbers</h3>
+      <div id="stats" class="mt-5 grid grid-cols-2 gap-3">
+        {stats.map((s) => (
+          <div class="rounded-[18px] border border-line p-1.5">
+            <div class="shadow-box flex h-full flex-col items-center justify-center rounded-xl px-2 py-5 text-center">
+              <p class="text-4xl font-medium tracking-tight text-ink tabular-nums">
+                <span class="stat-counter" data-target={s.value}>{s.value}</span>{s.suffix}
+              </p>
+              <p class="mt-1 text-xs text-ink-2">{s.label}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </BentoCard>
+
+    <!-- Currently -->
+    <BentoCard href="#journey" label="Currently: Software Engineer at IIT, NCSR Demokritos. See the full journey." class="reveal md:col-span-5" style="transition-delay: 160ms">
+      <div class="flex items-center gap-2">
+        <span class="relative flex h-2 w-2" aria-hidden="true">
+          <span class="ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+        </span>
+        <p class="text-xs font-semibold uppercase tracking-widest text-ink-3">Currently</p>
+      </div>
+      <p class="mt-3 text-lg font-medium leading-snug tracking-tight text-ink">
+        Software Engineer at IIT, NCSR "Demokritos"
+      </p>
+      <p class="mt-1 pr-10 text-sm text-ink-2">Pharos — the Greek AI Factory</p>
+    </BentoCard>
+
+    <!-- Stack -->
+    <BentoCard class="reveal md:col-span-12" style="transition-delay: 120ms">
+      <h3 class="mb-5 text-base font-medium text-ink">Stack</h3>
+      <ul id="skills-container" class="flex flex-wrap gap-2">
+        {skills.map((s, i) => (
+          <li
+            class="chip-reveal cursor-default rounded-full border border-line bg-canvas px-3 py-1.5 text-sm font-medium text-ink-2 hover:border-accent/50 hover:text-accent"
+            style={`transition-delay: ${i * 0.04}s`}
+          >
+            {s}
+          </li>
+        ))}
+      </ul>
+    </BentoCard>
+  </div>
+</section>
+
+<script>
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ── Skill chip cascade ──
+  const skills = document.getElementById('skills-container');
+  if (skills) {
+    const chips = skills.querySelectorAll('.chip-reveal');
+    if (!('IntersectionObserver' in window)) chips.forEach((c) => c.classList.add('visible'));
+    else {
+      const io = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          chips.forEach((c) => c.classList.add('visible'));
+          io.disconnect();
+          // Drop the stagger delay afterwards so hover colour changes are instant
+          setTimeout(() => chips.forEach((c) => ((c as HTMLElement).style.transitionDelay = '0s')), 1500);
+        }
+      }, { threshold: 0.2 });
+      io.observe(skills);
+    }
+  }
+
+  // ── Stat counters (server-rendered with final values; animate from 0 on view) ──
+  const statsEl = document.getElementById('stats');
+  if (statsEl && !reduce && 'IntersectionObserver' in window) {
+    const counters = Array.from(statsEl.querySelectorAll<HTMLElement>('.stat-counter'));
+    counters.forEach((el) => (el.textContent = '0'));
+    const animate = (el: HTMLElement) => {
+      const target = parseInt(el.dataset.target ?? '0', 10);
+      const duration = 1400;
+      const start = performance.now();
+      const step = (now: number) => {
+        const p = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = String(Math.floor(eased * target));
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = String(target);
+      };
+      requestAnimationFrame(step);
+    };
+    const io = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        counters.forEach(animate);
+        io.disconnect();
+      }
+    }, { threshold: 0.5 });
+    io.observe(statsEl);
+  }
+</script>

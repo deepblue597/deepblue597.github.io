@@ -1,106 +1,215 @@
 @import "tailwindcss";
 
+/* Class-based dark mode (html.dark), toggled from the navbar and persisted in
+   localStorage. An inline script in Layout.astro applies it before first paint. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ─────────────────────────────────────────────────────────────
+   Design tokens
+   Every surface/text/border color is a CSS variable so the whole
+   page flips between light and dark by swapping :root values.
+   All text pairs are checked for WCAG AA (≥ 4.5:1).
+   ───────────────────────────────────────────────────────────── */
+:root {
+  --c-canvas: #f7f7f8;      /* page background */
+  --c-surface: #ffffff;     /* raised cards / hover */
+  --c-surface-2: #edeef0;   /* inset "shadow box" wells */
+  --c-line: #d6dade;        /* borders, hatch pattern */
+  --c-ink: #0f172a;         /* primary text */
+  --c-ink-2: #5e5f6e;       /* secondary text  (5.9:1) */
+  --c-ink-3: #646b78;       /* tertiary text   (5.0:1) */
+  --c-accent: #4f46e5;      /* indigo accent   (5.9:1) */
+  --c-accent-soft: #e0e7ff;
+  --c-glow: 99 102 241;     /* rgb triplet for the background glow */
+  --c-panel: #101624;       /* always-dark panels (infra, contact) */
+  color-scheme: light;
+}
+
+.dark {
+  --c-canvas: #161e30;
+  --c-surface: #202a3e;
+  --c-surface-2: #2a3448;
+  --c-line: #2c3649;
+  --c-ink: #e4e9f0;
+  --c-ink-2: #98a6ba;
+  --c-ink-3: #8391a8;
+  --c-accent: #a5b4fc;
+  --c-accent-soft: #2d2f5e;
+  --c-glow: 129 140 248;
+  --c-panel: #0f1422;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-canvas: var(--c-canvas);
+  --color-surface: var(--c-surface);
+  --color-surface-2: var(--c-surface-2);
+  --color-line: var(--c-line);
+  --color-ink: var(--c-ink);
+  --color-ink-2: var(--c-ink-2);
+  --color-ink-3: var(--c-ink-3);
+  --color-accent: var(--c-accent);
+  --color-accent-soft: var(--c-accent-soft);
+  --color-panel: var(--c-panel);
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Offset anchor jumps so section titles clear the sticky navbar */
+    scroll-padding-top: 5rem;
+    background-color: var(--c-canvas);
   }
 
   body {
-    @apply bg-[#faf9f6] text-slate-800 font-sans antialiased;
+    @apply bg-canvas text-ink font-sans antialiased;
+  }
+
+  ::selection {
+    background-color: #6366f1;
+    color: #fff;
+  }
+
+  /* Consistent, visible keyboard focus everywhere */
+  :focus-visible {
+    outline: 2px solid var(--c-accent);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  body.menu-open {
+    overflow: hidden;
   }
 }
 
-/* Aurora blobs */
-.aurora-blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.35;
-  animation: float 12s ease-in-out infinite;
+/* ─────────────────────────────────────────────────────────────
+   Page frame: diagonal hatch used for the side rails and the
+   footer strip.
+   ───────────────────────────────────────────────────────────── */
+.hatched {
+  background-image: linear-gradient(
+    45deg,
+    color-mix(in oklab, var(--c-line) 55%, transparent) 12.5%,
+    transparent 12.5%,
+    transparent 50%,
+    color-mix(in oklab, var(--c-line) 55%, transparent) 50%,
+    color-mix(in oklab, var(--c-line) 55%, transparent) 62.5%,
+    transparent 62.5%,
+    transparent 100%
+  );
+  background-size: 5px 5px;
 }
 
-.aurora-blob:nth-child(1) {
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, #6366f1, #4f46e5);
-  top: -100px;
-  left: -100px;
-  animation-delay: 0s;
+/* Soft vertical indigo wash behind the centre column */
+.bg-glow {
+  background: linear-gradient(
+    to bottom,
+    rgb(var(--c-glow) / 0) 0%,
+    rgb(var(--c-glow) / 1) 50%,
+    rgb(var(--c-glow) / 0) 100%
+  );
+  opacity: 0.06;
+}
+.dark .bg-glow {
+  opacity: 0.05;
 }
 
-.aurora-blob:nth-child(2) {
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, #06b6d4, #0891b2);
-  top: 50px;
-  right: -150px;
-  animation-delay: -4s;
+/* ─────────────────────────────────────────────────────────────
+   Cards
+   ───────────────────────────────────────────────────────────── */
+
+/* Inset "well" — the recessed tile used inside bento cards */
+.shadow-box {
+  background-color: var(--c-surface-2);
+  box-shadow: inset 0 2px 1.5px 0 rgb(165 174 184 / 0.32);
+}
+.dark .shadow-box {
+  box-shadow: inset 0 2px 1.5px 0 rgb(0 0 0 / 0.3);
 }
 
-.aurora-blob:nth-child(3) {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, #8b5cf6, #7c3aed);
-  bottom: 0;
-  left: 30%;
-  animation-delay: -8s;
-}
-
-@keyframes float {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(30px, -30px) scale(1.05); }
-  66% { transform: translate(-20px, 20px) scale(0.95); }
-}
-
-/* Glassmorphism card */
-.glass-card {
+/* Bento card hover: lift to surface colour + corner gradient wash */
+.bento {
   position: relative;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  isolation: isolate;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
-
-.glass-card::before {
-  content: '';
+.bento::after {
+  content: "";
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 60%;
-  height: 100%;
-  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.07), transparent);
-  transform: skewX(-20deg);
-  transition: left 0.65s ease;
+  inset: 0;
+  z-index: -1;
   pointer-events: none;
-}
-
-.glass-card:hover::before {
-  left: 160%;
-}
-
-/* Scroll reveal */
-.reveal {
+  background: linear-gradient(to top left, rgb(129 140 248 / 0.18), transparent 55%);
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transition: opacity 0.3s ease;
+}
+.bento:hover,
+.bento:focus-within {
+  background-color: var(--c-surface);
+}
+.bento:hover::after,
+.bento:focus-within::after {
+  opacity: 1;
 }
 
-.reveal.visible {
+/* Subtle layered elevation for pills / small floating elements */
+.drama-shadow {
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 0.08),
+    0 2px 4px -2px rgb(0 0 0 / 0.06),
+    0 0 0 1px rgb(0 0 0 / 0.05);
+}
+.dark .drama-shadow {
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.08);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Motion
+   Reveal/hidden states only apply when JS is running (html.js),
+   so content is never invisible if scripts fail.
+   ───────────────────────────────────────────────────────────── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(14px); filter: blur(4px); }
+  to   { opacity: 1; transform: translateY(0);    filter: blur(0); }
+}
+
+.fade-up {
+  animation: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.js .reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+.js .reveal.visible {
   opacity: 1;
   transform: translateY(0);
 }
 
 /* Skill chip cascade */
-.chip-reveal {
+.js .chip-reveal {
   opacity: 0;
-  transform: translateY(10px) scale(0.92);
-  transition: opacity 0.35s ease, transform 0.35s ease;
+  transform: translateY(8px) scale(0.94);
+  transition: opacity 0.35s ease, transform 0.35s ease, color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
 }
-
-.chip-reveal.visible {
+.js .chip-reveal.visible {
   opacity: 1;
   transform: translateY(0) scale(1);
+}
+
+/* Homelab chips gently bob */
+@keyframes bubble-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-5px); }
 }
 
 /* Typewriter cursor */
@@ -108,18 +217,36 @@
   display: inline-block;
   width: 2px;
   height: 1em;
-  background: #22d3ee;
-  margin-left: 3px;
+  background: currentColor;
+  margin-left: 2px;
   vertical-align: text-bottom;
   animation: blink 1s step-end infinite;
 }
-
 @keyframes blink {
   0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
+  50%      { opacity: 0; }
 }
 
-/* Timeline line */
-.timeline-line {
-  background: linear-gradient(to bottom, #6366f1, #06b6d4);
+/* Live status dot */
+@keyframes ping {
+  75%, 100% { transform: scale(2.2); opacity: 0; }
+}
+.ping {
+  animation: ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .js .reveal,
+  .js .chip-reveal {
+    opacity: 1;
+    transform: none;
+  }
 }

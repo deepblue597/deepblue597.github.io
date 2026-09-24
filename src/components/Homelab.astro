@@ -1,0 +1,41 @@
+---
+import BentoCard from './BentoCard.astro';
+import SectionHeader from './SectionHeader.astro';
+import { homelabCategories } from '../data/site';
+
+const floatDurations = [3.2, 3.7, 4.3, 3.5, 4.8];
+const floatDelays = [0, 0.6, 1.2, 1.8, 0.4, 2.1, 0.9, 1.5, 0.2, 1.9];
+---
+
+<section id="homelab" class="pt-24 md:pt-32" aria-labelledby="homelab-title">
+  <SectionHeader
+    id="homelab-title"
+    eyebrow="Homelab"
+    title="Self-hosted stack"
+    subtitle="25+ Dockerized services across 2 machines — Traefik reverse proxy, Cloudflare DNS"
+  />
+
+  <div class="grid grid-cols-1 gap-2 md:grid-cols-12">
+    {homelabCategories.map((cat, ci) => (
+      <BentoCard class={`reveal ${cat.col}`} style={`transition-delay: ${ci * 70}ms`}>
+        <div class="mb-5 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <span class={`h-2 w-2 rounded-full ${cat.dot}`} aria-hidden="true"></span>
+            <h3 class={`text-xs font-semibold uppercase tracking-widest ${cat.title}`}>{cat.name}</h3>
+          </div>
+          <span class="font-mono text-xs text-ink-3">{String(cat.apps.length).padStart(2, '0')}</span>
+        </div>
+        <ul class="flex flex-wrap gap-2">
+          {cat.apps.map((app, ai) => (
+            <li
+              class={`float-chip select-none rounded-full border px-3 py-1.5 text-xs font-medium ${cat.chip}`}
+              style={`animation: bubble-float ${floatDurations[ai % 5]}s ease-in-out ${floatDelays[ai % 10]}s infinite`}
+            >
+              {app}
+            </li>
+          ))}
+        </ul>
+      </BentoCard>
+    ))}
+  </div>
+</section>

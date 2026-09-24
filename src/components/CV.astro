@@ -1,0 +1,67 @@
+---
+import { site } from '../data/site';
+---
+
+<section id="cv" class="pt-24 md:pt-32" aria-labelledby="cv-title">
+  <div class="reveal bento group grid grid-cols-1 items-center gap-8 rounded-2xl border border-line bg-canvas p-6 md:grid-cols-[auto_1fr] md:gap-12 md:p-10">
+    <!-- Document in a frame, tilted like a photo -->
+    <div class="relative mx-auto w-fit">
+      <div class="rounded-[20px] border border-line p-2 transition-colors duration-500 group-hover:border-accent/50">
+        <div class="shadow-box h-[190px] w-[150px] rounded-xl"></div>
+      </div>
+      <div
+        class="drama-shadow absolute left-2 top-1 h-[186px] w-[146px] rotate-[7deg] rounded-lg bg-surface p-4 transition-transform duration-500 group-hover:rotate-[3deg] group-hover:scale-105"
+        aria-hidden="true"
+      >
+        <div class="mb-3 flex items-center gap-2">
+          <div class="h-6 w-6 rounded-full bg-gradient-to-br from-indigo-400 to-cyan-300"></div>
+          <div class="space-y-1">
+            <div class="h-1.5 w-14 rounded bg-ink/70"></div>
+            <div class="h-1 w-10 rounded bg-ink/25"></div>
+          </div>
+        </div>
+        <div class="space-y-1.5">
+          {[100, 90, 95, 70, 0, 100, 85, 92, 60, 0, 100, 80].map((w) =>
+            w === 0 ? <div class="h-1.5"></div> : <div class="h-1 rounded bg-ink/15" style={`width:${w}%`}></div>
+          )}
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center md:text-left">
+      <p class="text-xs font-semibold uppercase tracking-widest text-accent">Curriculum Vitae</p>
+      <h2 id="cv-title" class="mt-3 text-3xl font-medium tracking-tight text-ink md:text-4xl">{site.name}</h2>
+      <p class="mt-2 text-ink-2">Software Engineer · MLOps · HPC Infrastructure</p>
+      <p class="mt-1 font-mono text-xs text-ink-3">{site.cvUpdated}</p>
+
+      <div class="mt-8 flex flex-wrap justify-center gap-3 md:justify-start">
+        <a
+          href="/cv.pdf"
+          download="Iasonas_Kakandris_CV.pdf"
+          class="inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-canvas transition-transform duration-200 hover:-translate-y-0.5"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          Download PDF
+        </a>
+        <a
+          href="/cv.pdf"
+          target="_blank"
+          rel="noopener"
+          class="inline-flex items-center gap-2 rounded-full border border-line bg-canvas px-5 py-2.5 text-sm font-medium text-ink transition-all duration-200 hover:-translate-y-0.5 hover:bg-surface"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+            <polyline points="15 3 21 3 21 9" />
+            <line x1="10" y1="14" x2="21" y2="3" />
+          </svg>
+          View online
+          <span class="sr-only">(opens in a new tab)</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

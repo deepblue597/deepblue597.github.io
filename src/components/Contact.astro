@@ -1,0 +1,48 @@
+---
+import { site } from '../data/site';
+---
+
+<section id="contact" class="pt-24 md:pt-32" aria-labelledby="contact-title">
+  <div class="reveal rounded-3xl border border-line bg-canvas p-2">
+    <div class="relative overflow-hidden rounded-2xl bg-panel px-6 py-16 text-center ring-1 ring-white/5 md:py-20">
+      <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(rgb(148_163_184/0.12)_1px,transparent_1.5px)] [background-size:18px_18px]" aria-hidden="true"></div>
+      <div class="pointer-events-none absolute -top-24 left-1/2 h-64 w-[560px] max-w-full -translate-x-1/2 rounded-full bg-indigo-500 opacity-20 blur-[100px]" aria-hidden="true"></div>
+
+      <div class="relative">
+        <p class="text-xs font-semibold uppercase tracking-widest text-indigo-300">Contact</p>
+        <h2 id="contact-title" class="mt-4 text-balance text-3xl font-medium tracking-tight text-white md:text-5xl">Let's talk</h2>
+        <p class="mx-auto mt-5 max-w-md text-balance leading-7 text-slate-300">
+          Whether it's infrastructure, MLOps, or just a good conversation about self-hosting — reach out.
+        </p>
+
+        <div class="mt-9 flex flex-wrap justify-center gap-3">
+          <a
+            href={`mailto:${site.email}`}
+            class="inline-flex max-w-full items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-medium text-slate-900 transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline-white"
+          >
+            <svg class="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4.75 7.75a2 2 0 0 1 2-2h10.5a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2H6.75a2 2 0 0 1-2-2v-8.5Z" /><path d="m5.5 6.5 6.5 5.75 6.5-5.75" />
+            </svg>
+            <span class="truncate">{site.email}</span>
+          </a>
+          <a
+            href={site.github}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:-translate-y-0.5 hover:border-white/40 focus-visible:outline-white"
+          >
+            GitHub<span class="sr-only"> (opens in a new tab)</span>
+          </a>
+          <a
+            href={site.linkedin}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:-translate-y-0.5 hover:border-white/40 focus-visible:outline-white"
+          >
+            LinkedIn<span class="sr-only"> (opens in a new tab)</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

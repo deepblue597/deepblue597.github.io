@@ -1,0 +1,70 @@
+---
+import Logo from './Logo.astro';
+import SocialPill from './SocialPill.astro';
+import { site } from '../data/site';
+
+const columns = [
+  {
+    title: 'Sections',
+    links: [
+      { label: 'About', href: '#about' },
+      { label: 'Cluster', href: '#cluster-section' },
+      { label: 'Journey', href: '#journey' },
+      { label: 'Projects', href: '#projects' },
+    ],
+  },
+  {
+    title: 'More',
+    links: [
+      { label: 'Homelab', href: '#homelab' },
+      { label: 'CV', href: '#cv' },
+      { label: 'Contact', href: '#contact' },
+    ],
+  },
+  {
+    title: 'Elsewhere',
+    links: [
+      { label: 'GitHub', href: site.github, external: true },
+      { label: 'LinkedIn', href: site.linkedin, external: true },
+      { label: 'Email', href: `mailto:${site.email}` },
+    ],
+  },
+];
+
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-24 border-t border-line">
+  <div class="flex flex-col gap-10 py-10 text-sm lg:flex-row lg:justify-between">
+    <div class="space-y-5">
+      <a href="#top" class="inline-flex items-center gap-2.5 rounded-lg" aria-label="Back to top">
+        <Logo size={36} />
+      </a>
+      <p class="max-w-64 leading-6 text-ink-2">Built with Astro · {site.location}</p>
+      <SocialPill class="inline-flex" />
+      <p class="text-ink-3">&copy; {year} {site.name}</p>
+    </div>
+
+    <div class="grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-16">
+      {columns.map((c) => (
+        <div>
+          <p class="mb-4 text-base font-medium text-ink">{c.title}</p>
+          <ul class="space-y-2 text-ink-2">
+            {c.links.map((l) => (
+              <li>
+                <a
+                  href={l.href}
+                  class="transition-colors hover:text-ink"
+                  target={l.external ? '_blank' : undefined}
+                  rel={l.external ? 'noopener noreferrer' : undefined}
+                >
+                  {l.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</footer>

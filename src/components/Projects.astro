@@ -1,0 +1,46 @@
+---
+import SectionHeader from './SectionHeader.astro';
+import { projects } from '../data/site';
+---
+
+<section id="projects" class="pt-24 md:pt-32" aria-labelledby="projects-title">
+  <SectionHeader id="projects-title" eyebrow="Projects" title="Things I've built & run" />
+
+  <ul class="grid grid-cols-1 gap-2 md:grid-cols-2">
+    {projects.map((p, i) => (
+      <li
+        class="reveal group flex h-full flex-col rounded-3xl border border-line bg-canvas p-2 transition-colors duration-300 hover:border-accent/40 hover:bg-surface"
+        style={`transition-delay: ${i * 80}ms`}
+      >
+        <!-- Visual well -->
+        <div class="shadow-box relative grid h-40 place-items-center overflow-hidden rounded-2xl md:h-44">
+          <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(rgb(100_116_139/0.18)_1px,transparent_1.5px)] [background-size:14px_14px]" aria-hidden="true"></div>
+          <div class="relative rounded-[20px] border border-line bg-canvas/60 p-1.5 transition-transform duration-500 ease-out group-hover:-translate-y-1.5 group-hover:rotate-[-4deg]">
+            <div class="grid h-20 w-20 place-items-center rounded-2xl bg-surface text-4xl shadow-sm" aria-hidden="true">{p.icon}</div>
+          </div>
+          <span
+            class:list={[
+              'absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium',
+              p.status === 'live'
+                ? 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-400/25 dark:bg-emerald-400/10 dark:text-emerald-300'
+                : 'border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-400/25 dark:bg-amber-400/10 dark:text-amber-300',
+            ]}
+          >
+            <span class:list={['h-1.5 w-1.5 rounded-full', p.status === 'live' ? 'bg-emerald-500' : 'bg-amber-500']} aria-hidden="true"></span>
+            {p.status === 'live' ? 'Live' : 'Building'}
+          </span>
+        </div>
+
+        <div class="flex flex-1 flex-col px-4 pb-3 pt-5">
+          <h3 class="text-lg font-medium tracking-tight text-ink">{p.name}</h3>
+          <p class="mt-2 flex-1 leading-7 text-ink-2">{p.description}</p>
+          <ul class="mt-4 flex flex-wrap gap-1.5" aria-label="Technologies">
+            {p.tags.map((t) => (
+              <li class="rounded-full border border-line px-2.5 py-0.5 text-xs text-ink-2">{t}</li>
+            ))}
+          </ul>
+        </div>
+      </li>
+    ))}
+  </ul>
+</section>
