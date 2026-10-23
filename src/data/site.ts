@@ -9,7 +9,7 @@ export const site = {
   github: 'https://github.com/deepblue597',
   linkedin: 'https://www.linkedin.com/in/iasonas-kakandris-498688209',
   location: 'Athens, Greece',
-  cvUpdated: 'Updated Sep 2026',
+  cvUpdated: 'Updated Oct 2026',
 };
 
 // Rotating roles for the hero typewriter
@@ -53,18 +53,37 @@ export const timeline = [
     year: 'Feb 2026 – Present',
     role: 'Software Engineer',
     org: 'IIT, NCSR "Demokritos"',
-    description: 'Integrated OpenBao into Themelio for dynamic, short-lived credentials and per-role access. Built zone-based network isolation on the Kubernetes cluster with Calico GlobalNetworkPolicy. Deployed Open OnDemand with Keycloak OIDC on Rocky Linux 9, exposing Jupyter, VSCode, and RStudio as Apptainer apps. Stood up Outline, Keycloak, Zammad, and Plane as the team\'s docs, auth, support, and project-tracking stack, and migrated provisioning and deployment to Ansible, Terraform, and ArgoCD.',
-    tags: ['OpenBao', 'Calico', 'Open OnDemand', 'Keycloak', 'Ansible', 'Terraform', 'ArgoCD'],
+    description: 'Built the Pharos platform\'s Support service in Go: users open and follow Zammad tickets with live updates, kept consistent through outages by an event-driven design (RabbitMQ, transactional outbox, idempotent consumers). Packaged Zammad as an Argo CD service so any environment gets a ready helpdesk in one command. Stood up Outline, Keycloak, Zammad, and Plane as the team\'s docs, auth, support, and project-tracking stack. Prototyped OpenBao dynamic credentials and Calico zone-based network isolation for Themelio\'s Kubernetes cluster, and deployed a pilot Open OnDemand portal with Keycloak OIDC.',
+    tags: ['Go', 'RabbitMQ', 'Zammad', 'ArgoCD', 'Keycloak', 'OpenBao', 'Open OnDemand'],
   },
 ];
 
-export const projects = [
+// `site` is a live deployment, `repo` the source code. Both are optional.
+export const projects: ReadonlyArray<{
+  name: string;
+  description: string;
+  tags: readonly string[];
+  status: 'live' | 'building';
+  icon: string;
+  site?: string;
+  repo?: string;
+}> = [
+  {
+    name: 'Athens Bus',
+    description: 'Web and Android app for Athens public transport: nearby stops, live arrivals, line timetables, live bus positions on a map, OASA service announcements, and metro and tram lines. No backend of its own: a Cloudflare Worker proxies the OASA API, and the list of stops is rebuilt nightly by a GitHub Action. Installable and works offline.',
+    tags: ['TypeScript', 'React', 'MapLibre', 'Cloudflare Workers', 'Capacitor', 'PWA'],
+    status: 'live',
+    icon: '🚌',
+    site: 'https://bus.deepblue597.org',
+    repo: 'https://github.com/deepblue597/athens-bus-app',
+  },
   {
     name: 'Beaver',
     description: 'A declarative DSL for building ML pipelines on live data streams. Write .bvr files — Beaver generates Python that wires Kafka, Quix Streams, River, and Plotly/Dash together. Includes static validation, model analysis, a unified CLI, and detailed error reporting. Developed as my M.Eng thesis.',
     tags: ['TextX', 'Jinja', 'Kafka', 'Quix Streams', 'River', 'Python', 'Docker'],
     status: 'live',
     icon: '🦫',
+    repo: 'https://github.com/deepblue597/beaver',
   },
   {
     name: 'ESP32 Greenhouse Monitor',
@@ -79,6 +98,7 @@ export const projects = [
     tags: ['TypeScript', 'Graph', 'Self-hosted'],
     status: 'live',
     icon: '🕸️',
+    repo: 'https://github.com/deepblue597/sixpath',
   },
   {
     name: 'Pharos AI Factory',
@@ -87,7 +107,7 @@ export const projects = [
     status: 'building',
     icon: '🏛️',
   },
-] as const;
+];
 
 export const skills = [
   'Python', 'C++', 'Java', 'TypeScript', 'Dart', 'C', 'Bash',
