@@ -2,11 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import About from '../components/About.astro';
-import ClusterViz from '../components/ClusterViz.astro';
-// SLURM CLUSTER VIZ — hidden until the 3-node HPC cluster is finished.
-// Bring back by uncommenting this import, the <SlurmViz /> below, and the HPC
-// entry in navLinks (src/data/site.ts).
-// import SlurmViz from '../components/SlurmViz.astro';
+import InfraViz from '../components/InfraViz.astro';
 import Journey from '../components/Journey.astro';
 import Projects from '../components/Projects.astro';
 import Homelab from '../components/Homelab.astro';
@@ -17,8 +13,7 @@ import Contact from '../components/Contact.astro';
 <Layout>
   <Hero />
   <About />
-  <ClusterViz />
-  {/* <SlurmViz /> */}
+  <InfraViz />
   <Journey />
   <Projects />
   <Homelab />

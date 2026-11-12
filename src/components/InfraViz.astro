@@ -1,15 +1,15 @@
 ---
 import SectionHeader from './SectionHeader.astro';
-import { clusterTags } from '../data/site';
+import { infraTags } from '../data/site';
 ---
 
-<!-- ── CLUSTER VIZ ── -->
-<section id="cluster-section" class="pt-24 md:pt-32" aria-labelledby="cluster-title">
+<!-- ── HOMELAB REQUEST PATH ── -->
+<section id="infra-section" class="pt-24 md:pt-32" aria-labelledby="infra-title">
   <SectionHeader
-    id="cluster-title"
+    id="infra-title"
     eyebrow="Infrastructure"
-    title="Kubernetes cluster"
-    subtitle="Every request passes through Authentik, ztunnel mTLS, and Kyverno policy before it reaches a pod"
+    title="Homelab request path"
+    subtitle="Every request crosses the Tailscale tailnet, Traefik TLS and Authentik single sign-on with 2FA before it reaches a service. Everything is deployed from Git and backed up nightly, encrypted, off-site."
   />
 
   <div class="reveal rounded-3xl border border-line bg-canvas p-2">
@@ -26,7 +26,7 @@ import { clusterTags } from '../data/site';
             <span class="h-2.5 w-2.5 rounded-full bg-white/15"></span>
             <span class="h-2.5 w-2.5 rounded-full bg-white/15"></span>
           </div>
-          <p class="font-mono text-xs text-slate-400">request-path</p>
+          <p class="font-mono text-xs text-slate-400">homelab/request-path</p>
         </div>
         <button
           id="cluster-toggle"
@@ -43,8 +43,8 @@ import { clusterTags } from '../data/site';
 
       <div class="relative px-3 py-10 sm:px-8 md:py-14">
         <p class="sr-only">
-          Diagram: a request travels from a client through Authentik (auth), ztunnel (mTLS, L4) and Kyverno (policy) to a pod,
-          which answers 200 OK; the response travels back through ztunnel to the client.
+          Diagram: a request travels from a client through Tailscale (WireGuard tunnel), Traefik (TLS) and Authentik (SSO with 2FA)
+          to a service, which answers 200 OK; the response travels back through Traefik to the client.
         </p>
         <div class="flex justify-center">
           <svg id="cluster-svg" viewBox="0 0 900 260" class="w-full max-w-3xl" aria-hidden="true">
@@ -74,69 +74,71 @@ import { clusterTags } from '../data/site';
               <text y="34" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">client</text>
             </g>
 
-            <!-- ── Authentik (auth gate) ── -->
-            <g class="k8s-gate" data-gate="authentik" transform="translate(255,130)">
+            <!-- ── Tailscale (tailnet gate) ── -->
+            <g class="k8s-gate" data-gate="tailscale" transform="translate(255,130)">
               <circle class="gate-ring" r="34" fill="none" stroke="#475569" stroke-width="1.5" opacity="0.35"/>
               <circle r="26" fill="rgba(15,14,23,0.97)" stroke="#818cf8" stroke-width="1.5" filter="url(#node-glow-f)"/>
-              <!-- shield icon -->
-              <path d="M0,-12 L10,-7 V2 C10,9 5,13 0,15 C-5,13 -10,9 -10,2 V-7 Z" fill="rgba(129,140,248,0.14)" stroke="#818cf8" stroke-width="1.4"/>
-              <circle cx="0" cy="-1" r="2.4" fill="none" stroke="#818cf8" stroke-width="1.2"/>
-              <line x1="0" y1="1.4" x2="0" y2="5" stroke="#818cf8" stroke-width="1.2"/>
-              <text y="46" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">Authentik</text>
-              <text y="59" text-anchor="middle" fill="#64748b" font-size="9" font-family="Inter,sans-serif">auth</text>
+              <!-- mesh / tailnet icon -->
+              <g fill="#818cf8">
+                <circle cx="-7" cy="-7" r="2.6"/><circle cx="0" cy="-7" r="2.6"/><circle cx="7" cy="-7" r="2.6"/>
+                <circle cx="-7" cy="0" r="2.6" opacity="0.45"/><circle cx="0" cy="0" r="2.6"/><circle cx="7" cy="0" r="2.6"/>
+                <circle cx="-7" cy="7" r="2.6" opacity="0.45"/><circle cx="0" cy="7" r="2.6" opacity="0.45"/><circle cx="7" cy="7" r="2.6" opacity="0.45"/>
+              </g>
+              <text y="46" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">Tailscale</text>
+              <text y="59" text-anchor="middle" fill="#64748b" font-size="9" font-family="Inter,sans-serif">WireGuard</text>
               <g class="gate-check" opacity="0" transform="translate(20,-20)">
                 <circle r="8" fill="#10b981"/>
                 <path d="M-3.5,0 L-1,3 L4,-3.5" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
               </g>
             </g>
 
-            <!-- ── ztunnel (mTLS gate) ── -->
-            <g class="k8s-gate" data-gate="ztunnel" transform="translate(440,130)">
+            <!-- ── Traefik (TLS gate) ── -->
+            <g class="k8s-gate" data-gate="traefik" transform="translate(440,130)">
               <circle class="gate-ring" r="34" fill="none" stroke="#475569" stroke-width="1.5" opacity="0.35"/>
               <circle r="26" fill="rgba(15,14,23,0.97)" stroke="#67e8f9" stroke-width="1.5" filter="url(#node-glow-f)"/>
               <!-- padlock icon -->
               <rect x="-8" y="-2" width="16" height="13" rx="2.5" fill="rgba(103,232,249,0.14)" stroke="#67e8f9" stroke-width="1.4"/>
               <path d="M-5,-2 V-6 a5,5 0 0 1 10,0 V-2" fill="none" stroke="#67e8f9" stroke-width="1.4"/>
               <circle cx="0" cy="4" r="1.6" fill="#67e8f9"/>
-              <text y="46" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">ztunnel</text>
-              <text y="59" text-anchor="middle" fill="#64748b" font-size="9" font-family="Inter,sans-serif">mTLS · L4</text>
+              <text y="46" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">Traefik</text>
+              <text y="59" text-anchor="middle" fill="#64748b" font-size="9" font-family="Inter,sans-serif">TLS · routing</text>
               <g class="gate-check" opacity="0" transform="translate(20,-20)">
                 <circle r="8" fill="#10b981"/>
                 <path d="M-3.5,0 L-1,3 L4,-3.5" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
               </g>
             </g>
 
-            <!-- ── Kyverno (policy gate) ── -->
-            <g class="k8s-gate" data-gate="kyverno" transform="translate(625,130)">
+            <!-- ── Authentik (SSO gate) ── -->
+            <g class="k8s-gate" data-gate="authentik" transform="translate(625,130)">
               <circle class="gate-ring" r="34" fill="none" stroke="#475569" stroke-width="1.5" opacity="0.35"/>
               <circle r="26" fill="rgba(15,14,23,0.97)" stroke="#34d399" stroke-width="1.5" filter="url(#node-glow-f)"/>
-              <!-- policy / clipboard icon -->
-              <rect x="-8" y="-11" width="16" height="21" rx="2.5" fill="rgba(52,211,153,0.14)" stroke="#34d399" stroke-width="1.4"/>
-              <rect x="-4" y="-13" width="8" height="3.5" rx="1" fill="#34d399"/>
-              <path d="M-4.5,0 L-1.5,3 L4.5,-4" fill="none" stroke="#34d399" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-              <text y="46" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">Kyverno</text>
-              <text y="59" text-anchor="middle" fill="#64748b" font-size="9" font-family="Inter,sans-serif">policy</text>
+              <!-- shield icon -->
+              <path d="M0,-12 L10,-7 V2 C10,9 5,13 0,15 C-5,13 -10,9 -10,2 V-7 Z" fill="rgba(52,211,153,0.14)" stroke="#34d399" stroke-width="1.4"/>
+              <circle cx="0" cy="-1" r="2.4" fill="none" stroke="#34d399" stroke-width="1.2"/>
+              <line x1="0" y1="1.4" x2="0" y2="5" stroke="#34d399" stroke-width="1.2"/>
+              <text y="46" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">Authentik</text>
+              <text y="59" text-anchor="middle" fill="#64748b" font-size="9" font-family="Inter,sans-serif">SSO · 2FA</text>
               <g class="gate-check" opacity="0" transform="translate(20,-20)">
                 <circle r="8" fill="#10b981"/>
                 <path d="M-3.5,0 L-1,3 L4,-3.5" fill="none" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
               </g>
             </g>
 
-            <!-- ── pod ── -->
+            <!-- ── service ── -->
             <g transform="translate(820,130)">
               <text class="pod-status" y="-40" text-anchor="middle" fill="#34d399" font-size="11" font-weight="600" opacity="0" font-family="Inter,sans-serif">200 OK</text>
               <circle r="32" fill="rgba(129,140,248,0.06)" stroke="rgba(129,140,248,0.16)" stroke-width="1"/>
               <circle r="24" fill="rgba(15,14,23,0.97)" stroke="rgba(129,140,248,0.7)" stroke-width="1.5"/>
               <!-- container/hexagon icon -->
               <path d="M0,-11 L9.5,-5.5 V5.5 L0,11 L-9.5,5.5 V-5.5 Z" fill="rgba(129,140,248,0.16)" stroke="#818cf8" stroke-width="1.3"/>
-              <text y="44" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">pod</text>
+              <text y="44" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="Inter,sans-serif">service</text>
             </g>
           </svg>
         </div>
 
         <!-- Tech tags -->
-        <ul class="mt-10 flex flex-wrap justify-center gap-2" aria-label="Cluster stack">
-          {clusterTags.map((t) => (
+        <ul class="mt-10 flex flex-wrap justify-center gap-2" aria-label="Homelab stack">
+          {infraTags.map((t) => (
             <li class="cursor-default rounded-full border border-white/10 bg-white/5 px-3 py-1.5 font-mono text-xs text-slate-400 transition-colors duration-200 hover:border-cyan-400/40 hover:text-cyan-300">
               {t}
             </li>
@@ -148,7 +150,7 @@ import { clusterTags } from '../data/site';
 </section>
 
 <script>
-  // ── Kubernetes animation: request journey through Authentik → ztunnel → Kyverno → pod ──
+  // ── Homelab animation: request journey through Tailscale → Traefik → Authentik → service ──
   (function () {
     const svg = document.getElementById('cluster-svg');
     if (!svg) return;
@@ -253,7 +255,7 @@ import { clusterTags } from '../data/site';
     // Static frame with every gate passed, shown until/unless the loop runs
     render(0.44);
 
-    const section = document.getElementById('cluster-section');
+    const section = document.getElementById('infra-section');
     if (section) {
       // Only animate while visible (saves CPU/battery when scrolled away)
       new IntersectionObserver((entries) => {

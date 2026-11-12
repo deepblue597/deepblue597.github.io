@@ -4,7 +4,7 @@
 export const site = {
   name: 'Iasonas Kakandris',
   title: 'Iasonas Kakandris — Software Engineer',
-  description: 'Software Engineer specializing in HPC, MLOps, and cloud-native infrastructure.',
+  description: 'Software Engineer building cloud-native platforms, MLOps pipelines, and self-hosted infrastructure.',
   email: 'ikakandris@gmail.com',
   github: 'https://github.com/deepblue597',
   linkedin: 'https://www.linkedin.com/in/iasonas-kakandris-498688209',
@@ -13,13 +13,12 @@ export const site = {
 };
 
 // Rotating roles for the hero typewriter
-export const roles = ['Software Engineer', 'MLOps Engineer', 'HPC Enthusiast', 'Homelab Operator'];
+export const roles = ['Software Engineer', 'Platform Engineer', 'MLOps Engineer', 'Homelab Operator'];
 
-// In-page navigation. The HPC link stays out until the Slurm section is finished.
+// In-page navigation.
 export const navLinks = [
   { name: 'About', href: '#about' },
-  { name: 'Cluster', href: '#cluster-section' },
-  // { name: 'HPC', href: '#slurm-section' }, // bring back once the Slurm section is finished
+  { name: 'Infra', href: '#infra-section' },
   { name: 'Journey', href: '#journey' },
   { name: 'Projects', href: '#projects' },
   { name: 'Homelab', href: '#homelab' },
@@ -54,7 +53,7 @@ export const timeline = [
     role: 'Software Engineer',
     org: 'IIT, NCSR "Demokritos"',
     description: 'Built the Pharos platform\'s Support service in Go: users open and follow Zammad tickets with live updates, kept consistent through outages by an event-driven design (RabbitMQ, transactional outbox, idempotent consumers). Packaged Zammad as an Argo CD service so any environment gets a ready helpdesk in one command. Stood up Outline, Keycloak, Zammad, and Plane as the team\'s docs, auth, support, and project-tracking stack. Prototyped OpenBao dynamic credentials and Calico zone-based network isolation for Themelio\'s Kubernetes cluster, and deployed a pilot Open OnDemand portal with Keycloak OIDC.',
-    tags: ['Go', 'RabbitMQ', 'Zammad', 'ArgoCD', 'Keycloak', 'OpenBao', 'Open OnDemand'],
+    tags: ['Go', 'RabbitMQ', 'Zammad', 'ArgoCD', 'Keycloak', 'OpenBao', 'Kubernetes'],
   },
 ];
 
@@ -102,25 +101,24 @@ export const projects: ReadonlyArray<{
   },
   {
     name: 'Pharos AI Factory',
-    description: 'EU-funded Greek national AI infrastructure. Building the platform layer connecting researchers to compute — HPC, Open OnDemand, identity management, and cloud-native services.',
-    tags: ['EU', 'AI', 'HPC', 'Infrastructure'],
+    description: 'EU-funded Greek national AI infrastructure. Building the platform services around it on Kubernetes: the user support service and helpdesk, identity, and the team\'s docs and project tooling.',
+    tags: ['EU', 'AI', 'Kubernetes', 'Platform'],
     status: 'building',
     icon: '🏛️',
   },
 ];
 
 export const skills = [
-  'Python', 'C++', 'Java', 'TypeScript', 'Dart', 'C', 'Bash',
-  'Kafka', 'Quix Streams', 'River', 'PostgreSQL', 'MinIO', 'Firebase',
-  'Docker', 'Kubernetes', 'k3s', 'Istio', 'ArgoCD', 'Kyverno', 'Helm', 'OpenTofu', 'Ansible',
-  'Falco', 'Trivy', 'cosign', 'Slurm', 'Apptainer', 'Traefik', 'Tailscale',
-  'Authentik', 'Keycloak', 'OpenLDAP', 'SSSD', 'ColdFront',
-  'Prometheus', 'Grafana', 'Loki', 'Kiali', 'Zammad',
+  'Go', 'Python', 'TypeScript', 'C++', 'Java', 'Dart', 'C', 'Bash',
+  'RabbitMQ', 'Kafka', 'Quix Streams', 'River', 'PostgreSQL', 'MinIO', 'Firebase',
+  'Docker', 'Kubernetes', 'k3s', 'Istio', 'ArgoCD', 'Kyverno', 'Calico', 'Helm', 'OpenTofu', 'Ansible',
+  'OpenBao', 'Falco', 'Trivy', 'cosign', 'Traefik', 'Tailscale', 'Komodo',
+  'Authentik', 'Keycloak', 'Zammad', 'restic',
+  'Prometheus', 'Grafana', 'Loki', 'Kiali',
 ];
 
 export const stats = [
   { value: 25, suffix: '+', label: 'Self-hosted services' },
-  // { value: 3, suffix: '', label: 'Node HPC cluster' },
   { value: 4, suffix: '+', label: 'Years engineering' },
 ];
 
@@ -132,7 +130,7 @@ export const homelabCategories = [
     title: 'text-violet-700 dark:text-violet-300',
     chip: 'border-violet-200 bg-violet-50 text-violet-700 dark:border-violet-400/25 dark:bg-violet-400/10 dark:text-violet-200',
     col: 'md:col-span-7',
-    apps: ['Jellyfin', 'Sonarr', 'Radarr', 'Prowlarr', 'Jellyseerr', 'qBittorrent', 'Recommendarr'],
+    apps: ['Jellyfin', 'Jellyseerr', 'Sonarr', 'Radarr', 'Lidarr', 'Prowlarr', 'qBittorrent', 'slskd', 'Navidrome'],
   },
   {
     name: 'Photos & Docs',
@@ -140,7 +138,7 @@ export const homelabCategories = [
     title: 'text-sky-700 dark:text-sky-300',
     chip: 'border-sky-200 bg-sky-50 text-sky-700 dark:border-sky-400/25 dark:bg-sky-400/10 dark:text-sky-200',
     col: 'md:col-span-5',
-    apps: ['Immich', 'Paperless', 'BookLore', 'Syncthing', 'File Browser', 'Karakeep'],
+    apps: ['Immich', 'Paperless', 'Grimmory', 'Karakeep', 'Miniflux', 'Syncthing', 'File Browser'],
   },
   {
     name: 'Infrastructure',
@@ -148,7 +146,7 @@ export const homelabCategories = [
     title: 'text-amber-700 dark:text-amber-300',
     chip: 'border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-400/25 dark:bg-amber-400/10 dark:text-amber-200',
     col: 'md:col-span-12',
-    apps: ['Traefik', 'Pi-hole', 'Portainer', 'Beszel', 'Uptime Kuma', 'n8n'],
+    apps: ['Traefik', 'Authentik', 'Tailscale', 'Komodo', 'Pi-hole', 'Backrest', 'Uptime Kuma', 'Homarr'],
   },
   {
     name: 'Finance',
@@ -156,17 +154,16 @@ export const homelabCategories = [
     title: 'text-emerald-700 dark:text-emerald-300',
     chip: 'border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-400/25 dark:bg-emerald-400/10 dark:text-emerald-200',
     col: 'md:col-span-6',
-    apps: ['Actual Budget', 'Ghostfolio'],
+    apps: ['Ghostfolio', 'ezBookkeeping'],
   },
   {
-    name: 'AI & Storage',
+    name: 'Home & Storage',
     dot: 'bg-indigo-400',
     title: 'text-indigo-700 dark:text-indigo-300',
     chip: 'border-indigo-200 bg-indigo-50 text-indigo-700 dark:border-indigo-400/25 dark:bg-indigo-400/10 dark:text-indigo-200',
     col: 'md:col-span-6',
-    apps: ['Open WebUI', 'OpenMediaVault'],
+    apps: ['Home Assistant', 'OpenMediaVault'],
   },
 ];
 
-export const clusterTags = ['k3s', 'Istio ambient', 'ArgoCD', 'cert-manager', 'Kyverno', 'Authentik', 'Sealed Secrets', 'Trivy'];
-export const slurmTags = ['Slurm', 'Open OnDemand', 'Apptainer', 'Ansible', 'MUNGE', 'ColdFront', 'SSSD / LDAP', 'MariaDB'];
+export const infraTags = ['Tailscale', 'Traefik', 'Cloudflare DNS', 'Authentik', 'OIDC · LDAP · forward auth', 'Komodo', 'restic · Backrest', 'Hetzner Storage Box'];
